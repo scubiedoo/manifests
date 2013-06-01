@@ -53,8 +53,8 @@ Please notices that, The livesuit is provided by allwinner, and they are closed 
 
 Ubuntu 12.04 Desktop:
 
-* [v1.03, DDR480MHz](http://ubuntuone.com/5XAQqDTbQ9HsJ1iiSAhhdu "image1, DDR480Mhz")
-* [v1.03, DDR432MHz](http://ubuntuone.com/0tRcRMM8MsoHMJ2onL9YNI "image2, DDR432MHz")
+* [v1.02, DDR480MHz](http://ubuntuone.com/5XAQqDTbQ9HsJ1iiSAhhdu "image1, DDR480Mhz")
+* [v1.02, DDR432MHz](http://ubuntuone.com/0tRcRMM8MsoHMJ2onL9YNI "image2, DDR432MHz")
 
 Android 4.2:
 
