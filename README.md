@@ -38,9 +38,9 @@ Please notices that, The livesuit is provided by allwinner, and they are closed 
 
 1. Start livesuit, and select the image you want to flash
 
-2. Power off Cubieboard2, press the FEX key, which is near to the Mini-USB port, and hold it on while plugging in Mini USB cable
+2. Power off Cubieboard2, press the FEL key, which is near to the Mini-USB port, and hold it on while plugging in Mini USB cable
 
-3.  Livesuit will run into FEX mode, and start to flash the image to nandflash
+3.  Livesuit will run into FEL mode, and start to flash the image to nandflash
 
 # 2. Notes
 
