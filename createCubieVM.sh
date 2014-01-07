@@ -1,3 +1,3 @@
 #!/bin/bash
 
-source createCubieVM.inc
+source createCubieVM.bat

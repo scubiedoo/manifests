@@ -1,4 +1,4 @@
 manifests
 =========
 
-vagrant box add cubievm http://files.vagrantup.com/precise32.box
+vagrant box add precise32 http://files.vagrantup.com/precise32.box
