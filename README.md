@@ -3,6 +3,8 @@ manifests
 
 Android style to manage cubieboard2 repos
 
+# 0. Prerequisites
+
 # 1.Instructions to create linux test firmware for cubieboard2
 
 ## 1.1 Get source code
