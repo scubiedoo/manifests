@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+    <remote name="github" fetch="git://github.com/scubiedoo/" />
+    <default revision="cubiuntu" remote="github" sync-j="4" />
+
+<!--    <project name="linux-sunxi" path="linux-sunxi" revision="sunxi-3.3-cb2" />
+    <project name="tools" path="tools">
+        <copyfile src="scripts/build.sh" dest="build.sh" />
+    </project>
+    <project name="rootfs" path="rootfs" />
+-->  
+</manifest>
+
