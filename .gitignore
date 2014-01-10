@@ -2,3 +2,5 @@
 /.vagrant
 
 /*.box
+
+/vm/*.box
