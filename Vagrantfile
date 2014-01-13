@@ -1,4 +1,3 @@
-cubie_dev_disk="vm/cubiedev.vdi"
 Vagrant.configure("2") do |config|
   config.apt_proxy.http = "squid:80"
   config.apt_proxy.https = "squid:80"
