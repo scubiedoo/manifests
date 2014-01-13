@@ -15,11 +15,9 @@ if ERRORLEVEL 1 GOTO:EOF
 cmd /c vagrant package --base cubievm --output vm\cubievm.box --vagrantfile Vagrantfile.cubievm
 if ERRORLEVEL 1 GOTO:EOF
 
-cmd /c mv package.box vm/cubievm.box
-if ERRORLEVEL 1 GOTO:EOF
-
 cmd /c vagrant box add --force cubievm vm\cubievm.box
 if ERRORLEVEL 1 GOTO:EOF
 
+echo "Successfully created cubievm box"
 
 :EOF

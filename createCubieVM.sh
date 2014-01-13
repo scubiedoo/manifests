@@ -1,6 +1,6 @@
 #!/bin/sh
 
-run_ok()
+success()
 {
 	local CMD
 	local RET
@@ -14,16 +14,15 @@ run_ok()
 	fi
 }
 
-run_ok mkdir -p vm
-run_ok [ -r vm/precise32.box ] || (cd vm; wget http://files.vagrantup.com/precise32.box; cd -)
+success mkdir -p vm
+success [ -r vm/precise32.box ] || (cd vm; wget http://files.vagrantup.com/precise32.box; cd -)
 
-run_ok vagrant box add precise32 precise32.box
+success vagrant box add precise32 precise32.box
 
-run_ok vagrant plugin install vagrant-proxyconf
+success vagrant plugin install vagrant-proxyconf
 
-run_ok vagrant up
+success vagrant destroy
+success vagrant up
 
-#run_ok vagrant package --base cubievm --output cubievm.box --vagrantfile Vagrantfile.cubievm
-run_ok vagrant box add --force cubievm precise32.box
-run_ok vagrant box repackage cubievm virtualbox
-run_ok mv package.box vm/cubievm.box
+success vagrant package --base cubievm --output vm/cubievm.box --vagrantfile Vagrantfile.cubievm
+success vagrant box add --force cubievm vm/cubievm.box
