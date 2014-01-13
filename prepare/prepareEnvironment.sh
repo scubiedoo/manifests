@@ -47,4 +47,14 @@ function prepareDisk()
 	fi
 }
 
+function get_sources()
+{
+	success su vagrant -c "\"chmod a+x /vagrant/prepare/get_sources.sh && /vagrant/prepare/get_sources.sh\""
+}
+
+# i want to use an extra image file in order to have the possibility to run vagrant destroy and recreate my image.
+# but i don't want to lose my compiled files and images
+# 
 prepareDisk /vagrant/vm/builddisk.img /mnt/builddisk
+
+get_sources
