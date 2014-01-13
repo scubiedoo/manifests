@@ -1,5 +1,5 @@
 #!/bin/bash
-VAGRANT_PROVISION=1
+export VAGRANT_PROVISION=1
 
 STARTDIR=`pwd`
 SRCDIR="/vagrant"
@@ -14,33 +14,37 @@ eval `$CONFIGFILE`
 
 #
 #
+function createDisk()
+{
+	local disk
+	disk=$1
+	# remember: blocksize=1K * seek=10M => 10GB disksize
+	success dd if=/dev/zero of=$disk  bs=1K seek=10M count=1
+	# we create ext2 because ignore journalling and stuff
+	success mkfs.ext2 -F $disk
+}
+#
+#
 function prepareDisk()
 {
-	local disk diskname
-	local cnt
+	local disk diskname mountppoint device RET
 	disk="$1"
-	diskname=`basename $disk`
-	# check partition: we expect two sdb and sdb1
-	#
-	# in case this is our first run, the disk will be empty
-	# this means /proc/partitions only contains one entry: sdb
-	cnt=`ls ${disk}* |wc -l`
-	[ $? = 0 ] || build_err "checking partition sdb failed" ;
-	if [ $cnt = 0 ]; then
-		build_err "disk $diskname not found";
-	elif [ $cnt = 1 ]; then
-		build_out "creating new partition table for $disk"
-		[ -w $disk ] || build_err "$disk is not writeable"
-		
-		success [ -r $SRCDIR/prepare/cubiedisk.partition ]
-		success sfdisk $disk -O $SRCDIR/$diskname.partition
-		success sfdisk $disk -I $SRCDIR/prepare/cubiedisk.partition
-	elif [ $cnt = 2 ]; then
-		build_out "found disks"
-	else
-		build_err "disk $disk doesn't match the expected partition layout with exactly one partition";
+	mountpoint="$2"
+	
+	success "[ -r $disk ] || createDisk $disk"
+	
+	#disk already mounted...?! caused by "vagrant provision"
+	device="`mount |grep \"$mountpoint\"`"
+	RET=$?
+	if [ $RET != 0 ]; then
+		success mkdir -p $mountpoint
+			
+		device=`losetup -f`
+		RET=$?
+		success "[ -n $device ] || echo 'no more loop devices'"
+		success	losetup $device $disk
+		success mount -t ext2 $device $mountpoint
 	fi
 }
 
-success mkdir -p /mnt/builddisk
-prepareDisk /dev/sdb
+prepareDisk /vagrant/vm/builddisk.img /mnt/builddisk
