@@ -15,3 +15,4 @@ CONFIGFILE="build.config.sh"
 success chmod a+x $CONFIGFILE
 eval `./$CONFIGFILE`
 
+success source build/get_sources.sh

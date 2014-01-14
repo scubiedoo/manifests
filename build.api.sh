@@ -13,7 +13,6 @@ export BUILD_DEBUG=3
 # 
 # Copyright 2012 Yu-Jie Lin
 # MIT License
-
 # Log Call Stack
 LSLOGSTACK () {
   local i=0
@@ -25,8 +24,8 @@ LSLOGSTACK () {
     sed -n "${BASH_LINENO[i]}{s/^/    /;p}" "${BASH_SOURCE[i+1]}"
   done
 }
-
 # COPY END
+
 function build_err()
 {
 	if [ $BUILD_DEBUG -gt 0 ]; then 
@@ -44,9 +43,11 @@ function build_warn()
 function build_ok()
 {
 	if [ $BUILD_DEBUG -gt 2 ]; then 
-		echo "${BUILD_CLR_YELLOW}${@}${BUILD_CLR_RST}" 1>&2
+		echo "${BUILD_CLR_GREEN}${@}${BUILD_CLR_RST}" 1>&2
 	fi
 }
+export -f build_ok
+
 function build_out()
 {
 	echo "${@}" 1>&2
@@ -64,3 +65,21 @@ function success()
 		build_err "failed with code $RET"
 	fi
 }
+
+function build_export()
+{
+	local var=$1
+	local val="$2"
+	build_ok "exporting user-defined variable $var=$val"
+	echo "export $var=\"$val\""
+}
+export -f build_export
+
+function build_set()
+{
+	local var=$1
+	local val="$2"
+	build_ok "setting user-define variable $var=$val"
+	echo "$var=\"$val\""
+}
+export -f build_set
