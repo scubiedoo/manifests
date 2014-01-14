@@ -7,6 +7,7 @@ PACKAGELIST=" \
 	gcc-arm-linux-gnueabihf \
 	qemu-kvm-extras-static \
 	kpartx \
+	u-boot-tools \
 	"
 
 run_ok()
