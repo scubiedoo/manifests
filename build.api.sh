@@ -26,40 +26,47 @@ LSLOGSTACK () {
 }
 # COPY END
 
-function build_err()
-{
-	if [ $BUILD_DEBUG -gt 0 ]; then 
-		echo "${BUILD_CLR_RED}${@}${BUILD_CLR_RST}" 1>&2
-		LSLOGSTACK 
-		exit 1
-	fi
-}
-function build_warn()
-{
-	if [ $BUILD_DEBUG -gt 1 ]; then 
-		echo "${BUILD_CLR_YELLOW}${@}${BUILD_CLR_RST}" 1>&2
-	fi
-}
-function build_ok()
-{
-	if [ $BUILD_DEBUG -gt 2 ]; then 
-		echo "${BUILD_CLR_GREEN}${@}${BUILD_CLR_RST}" 1>&2
-	fi
-}
-export -f build_ok
-
 function build_out()
 {
 	echo "${@}" 1>&2
 }
+export -f build_out
+function build_err()
+{
+	if [ $BUILD_DEBUG -gt 0 ]; then 
+		build_out "${BUILD_CLR_RED}${@}${BUILD_CLR_RST}"
+		LSLOGSTACK 
+		exit 1
+	fi
+}
+export -f build_err
+function build_info()
+{
+	if [ $BUILD_DEBUG -gt 1 ]; then 
+		build_out "${BUILD_CLR_YELLOW}${@}${BUILD_CLR_RST}"
+	fi
+}
+export -f build_info
+function build_ok()
+{
+	if [ $BUILD_DEBUG -gt 2 ]; then 
+		build_out "${BUILD_CLR_GREEN}${@}${BUILD_CLR_RST}"
+	fi
+}
+export -f build_ok
+
+function execute()
+{
+	local CMD
+	CMD="$@"
+	build_info "executing $CMD"
+	eval $CMD
+}
 
 function success()
 {
-	local CMD
 	local RET
-	CMD="$@"
-	build_out "executing $CMD"
-	eval $CMD
+	execute $@
 	RET=$?
 	if [ $RET != 0 ]; then
 		build_err "failed with code $RET"
@@ -79,7 +86,7 @@ function build_set()
 {
 	local var=$1
 	local val="$2"
-	build_ok "setting user-define variable $var=$val"
+	build_ok "setting user-defined variable $var=$val"
 	echo "$var=\"$val\""
 }
 export -f build_set

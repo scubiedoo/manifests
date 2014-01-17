@@ -3,4 +3,4 @@
 
 # config parameter
 #
-build_set BUILDDIR "/mnt/builddisk/vagrant"
+build_export BUILDDIR "/mnt/builddisk/vagrant"
