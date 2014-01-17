@@ -8,6 +8,7 @@ PACKAGELIST=" \
 	qemu-kvm-extras-static \
 	kpartx \
 	u-boot-tools \
+	ncurses-dev \
 	"
 
 run_ok()
