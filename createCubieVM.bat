@@ -1,5 +1,5 @@
-set HTTP_PROXY=squid:80/
-set HTTPS_PROXY=squid:80/
+rem set HTTP_PROXY=squid:80/
+rem set HTTPS_PROXY=squid:80/
 
 mkdir vm
 
