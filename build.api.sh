@@ -8,7 +8,9 @@ export BUILD_CLR_YELLOW="${BUILD_CLR_ESC}[0;33m"
 export BUILD_CLR_RED="${BUILD_CLR_ESC}[0;31m"
 export BUILD_CLR_BLUE="${BUILD_CLR_ESC}[0;34m"
 export BUILD_CLR_RST=`echo -en "${BUILD_CLR_ESC}[m\000"`
-export BUILD_DEBUG=4
+
+# i need to set this configuration here, because prepareEnvironment uses this script too
+export BUILD_DEBUG=3
 
 # COPY START http://blog.yjl.im/2012/01/printing-out-call-stack-in-bash.html
 # 

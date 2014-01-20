@@ -6,6 +6,8 @@ export VAGRANT_PROVISION=1
 #
 export STARTDIR=`pwd`
 export SRCDIR="/vagrant"
+export BUILD_DEBUG=4
+
 cd $SRCDIR
 source "$SRCDIR/build.api.sh"
 

@@ -13,7 +13,7 @@ function build_rootfs()
 	rootfs="$1"
 	
 	# we nee the -E flag to pass through http_proxy
-	success "[ -r ${ROOTFS_IMAGE} ] || { wget -O ${ROOTFS_IMAGE} ${ROOTFS_SOURCE}; }"
+	success "[ -r ${ROOTFS_IMAGE} ] || wget -O ${ROOTFS_IMAGE} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
 	success sudo tar xzf ${ROOTFS_IMAGE}
 	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
@@ -27,7 +27,14 @@ function setup_rootfs()
 	local rootfs
 	rootfs="$1"
 	
-	success sudo chroot ${rootfs} "echo -e "root\nroot" |passwd root"
+	success sudo mkdir -p ${rootfs}/root/setup
+	success sudo cp -a ${SRCDIR}/setup/* ${rootfs}/root/setup
+	for script in ${ROOTFS_SCRIPTS}; do
+		execute sudo chroot ${rootfs} [ -r /root/setup/${script} ] && {
+			success sudo chmod a+x ${rootfs}/root/setup/${script} ;
+			success sudo chroot ${rootfs} /root/setup/${script} ;
+		}
+	done
 	if [ ${ROOTFS_INTERACTIVE} = 1 ]; then
 		success sudo chroot ${rootfs} "$SHELL -i"
 	fi
