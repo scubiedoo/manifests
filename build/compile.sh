@@ -57,38 +57,32 @@ function prepare_image
 	build_ok prepared image
 }
 
-function assemble_imgage
-{
-	build_ok assemble image
-	# reference: http://linux-sunxi.org/Bootable_SD_card
-#	success dd if=/dev/zero of=${image} bs=1M count=1 conv=notrunc
-
-	#Partition
-#	success sudo parted -s ${image} mklabel msdos
-#	success sudo parted -s ${image} unit MB mkpart primary fat32 -- 1 16
-#	success sudo parted -s ${image} unit MB mkpart primary ext4 -- 16 -2
-
-	#Bootloader
-#	success dd if=u-boot-sunxi/u-boot-sunxi-with-spl.bin of=${image} bs=1024 seek=8 conv=notrunc
-	build_ok assembled image
-}
-
 #
 # main part
 #
 success mkdir -p $BUILDDIR
-cd $BUILDDIR
-#source ${SRCDIR}/build/uboot.sh
-
-cd $BUILDDIR
-#source ${SRCDIR}/build/kernel.sh
 
 cd $BUILDDIR
 success prepare_image BOOTFS_IMAGE
 success prepare_image ROOTFS_IMAGE
+#
+# we might use some advanced mechanism like getopt here
+if [ "x$1" = "x" ]; then
+	cd $BUILDDIR
+	source ${SRCDIR}/build/uboot.sh
 
-cd $BUILDDIR
-source ${SRCDIR}/build/rootfs.sh ${ROOTFS_IMAGE[DIR]}
+	cd $BUILDDIR
+	source ${SRCDIR}/build/kernel.sh
 
-success assemble_imgage
+	cd $BUILDDIR
+	source ${SRCDIR}/build/rootfs.sh
 
+	cd $BUILDDIR
+	source ${SRCDIR}/build/assemble.sh
+else
+	while [ $# -gt 0 ]; do
+		cd $BUILDDIR
+		source ${SRCDIR}/build/$1.sh
+		shift
+	done
+fi

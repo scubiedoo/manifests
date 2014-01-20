@@ -1,9 +1,8 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from build.sh" 1>&2; exit 1; }
 
-echo "load_configuration $@"
 build_ok invoked 
-eval "`load_configuration $@`"
+eval "`load_configuration ${ROOTFS_IMAGE[DIR]}`"
 
 function build_rootfs()
 {
@@ -13,9 +12,9 @@ function build_rootfs()
 	rootfs="$1"
 	
 	# we nee the -E flag to pass through http_proxy
-	success "[ -r ${ROOTFS_IMAGE} ] || wget -O ${ROOTFS_IMAGE} ${ROOTFS_SOURCE};"
+	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_IMAGE} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
-	success sudo tar xzf ${ROOTFS_IMAGE}
+	success sudo tar xzf ${ROOTFS_FILE}
 	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
 	
 	build_ok built rootfs

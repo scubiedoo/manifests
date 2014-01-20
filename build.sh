@@ -17,4 +17,4 @@ CONFIGFILE="build.config.sh"
 success chmod a+x $CONFIGFILE
 eval `./$CONFIGFILE`
 
-source build/compile.sh
+source build/compile.sh $@
