@@ -4,8 +4,8 @@ export VAGRANT_PROVISION=1
 # prepare
 # i like to start from my source dir so that i have control over my directory structure and include paths
 #
-STARTDIR=`pwd`
-SRCDIR="/vagrant"
+export STARTDIR=`pwd`
+export SRCDIR="/vagrant"
 cd $SRCDIR
 source "$SRCDIR/build.api.sh"
 
@@ -15,4 +15,4 @@ CONFIGFILE="build.config.sh"
 success chmod a+x $CONFIGFILE
 eval `./$CONFIGFILE`
 
-success source build/get_sources.sh
+source build/compile.sh

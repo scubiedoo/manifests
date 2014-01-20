@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
-  config.apt_proxy.http = "squid:80"
-  config.apt_proxy.https = "squid:80"
+  config.apt_proxy.http = ENV['HTTP_PROXY']
+  config.apt_proxy.https = ENV['HTTPS_PROXY']
   config.vm.box = "cubievm"
 
   config.vm.provider :virtualbox do |vb|

@@ -6,8 +6,9 @@ export BUILD_CLR_ESC=`echo -en "\033"`
 export BUILD_CLR_GREEN="${BUILD_CLR_ESC}[0;32m"
 export BUILD_CLR_YELLOW="${BUILD_CLR_ESC}[0;33m"
 export BUILD_CLR_RED="${BUILD_CLR_ESC}[0;31m"
-export BUILD_CLR_RST=`echo -en "${BUILD_CLR_ESC}[m\017"`
-export BUILD_DEBUG=3
+export BUILD_CLR_BLUE="${BUILD_CLR_ESC}[0;34m"
+export BUILD_CLR_RST=`echo -en "${BUILD_CLR_ESC}[m\000"`
+export BUILD_DEBUG=4
 
 # COPY START http://blog.yjl.im/2012/01/printing-out-call-stack-in-bash.html
 # 
@@ -55,6 +56,14 @@ function build_ok()
 }
 export -f build_ok
 
+function build_debug()
+{
+	if [ $BUILD_DEBUG -gt 3 ]; then 
+		build_out "${BUILD_CLR_BLUE}${@}${BUILD_CLR_RST}"
+	fi
+}
+export -f build_debug
+
 function execute()
 {
 	local CMD
@@ -90,3 +99,25 @@ function build_set()
 	echo "$var=\"$val\""
 }
 export -f build_set
+
+function load_configuration()
+{
+build_debug "`set`"
+	local name dir prefix output
+	name=`basename ${BASH_SOURCE[1]}`
+	dir=`dirname ${BASH_SOURCE[1]}`
+	prefix=${name%.sh}
+	
+	name="$dir/$prefix.default.sh"
+	success chmod a+x $name
+	output="`$name $@`"
+	build_debug "${output}"
+	echo "${output}"
+	
+	name="$dir/$prefix.config.sh"
+	execute [ -r $name ] && {
+		success chmod a+x $name
+		echo "`$name $@`"
+	}
+}
+export -f load_configuration
