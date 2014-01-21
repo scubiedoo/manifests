@@ -1,8 +1,8 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from build.sh" 1>&2; exit 1; }
 
-build_ok invoked 
-eval "`load_configuration ${ROOTFS_IMAGE[DIR]}`"
+build_ok invoked $0
+eval "`load_configuration \"${ROOTFS_IMAGE[DIR]}\"`"
 
 function build_rootfs()
 {
@@ -38,6 +38,14 @@ function setup_rootfs()
 		success sudo chroot ${rootfs} "$SHELL -i"
 	fi
 }
+
+#
+# create extra filesystem used for compiling stuff like xbmc
+#
+#cd ${BUILDDIR}
+#success prepare_image BUILDFS_IMAGE
+#cd ${BUILDDIR}
+#success build_rootfs ${BUILDFS_IMAGE[DIR]}
 
 cd ${BUILDDIR}
 success build_rootfs ${ROOTFS_DIR}
