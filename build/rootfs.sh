@@ -1,12 +1,30 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from build.sh" 1>&2; exit 1; }
 
-build_ok invoked 
-eval "`load_configuration ${ROOTFS_IMAGE[DIR]}`"
+build_ok invoked $0
+eval "`load_configuration \"${ROOTFS_IMAGE[DIR]}\"`"
+
+function setupChroot()
+{
+	local rootfs
+	rootfs="$1"
+
+	mv ${rootfs}/etc/resolv.conf ${rootfs}/etc/resolv.conf.orig
+	cp /etc/resolv.conf .${rootfs}/etc/resolv.conf
+	mount -o bind /proc .${rootfs}/proc
+	mount -o bind /dev .${rootfs}/dev
+	mount -o bind /dev/pts ${rootfs}/dev/pts
+	mount -o bind /sys ${rootfs}/sys
+	chroot ${rootfs}
+	umount ${rootfs}/sys
+	umount ${rootfs}/dev/pts
+	umount ${rootfs}/dev
+	umount ${rootfs}/proc
+}
 
 function build_rootfs()
 {
-	build_ok building rootfs
+	build_ok building rootfs $1
 
 	local rootfs
 	rootfs="$1"
@@ -17,12 +35,13 @@ function build_rootfs()
 	success sudo tar xzf ${ROOTFS_FILE}
 	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
 	
-	build_ok built rootfs
+	build_ok built rootfs $1
 }
 
 function setup_rootfs()
 {
-	build_info setup_rootfs
+	build_ok setting up rootfs $1
+	
 	local rootfs
 	rootfs="$1"
 	
@@ -37,7 +56,17 @@ function setup_rootfs()
 	if [ ${ROOTFS_INTERACTIVE} = 1 ]; then
 		success sudo chroot ${rootfs} "$SHELL -i"
 	fi
+
+	build_ok setting up rootfs $1
 }
+
+#
+# create extra filesystem used for compiling stuff like xbmc
+#
+#cd ${BUILDDIR}
+#success prepare_image BUILDFS_IMAGE
+#cd ${BUILDDIR}
+#success build_rootfs ${BUILDFS_IMAGE[DIR]}
 
 cd ${BUILDDIR}
 success build_rootfs ${ROOTFS_DIR}
