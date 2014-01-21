@@ -63,8 +63,8 @@ function prepare_image
 success mkdir -p $BUILDDIR
 
 cd $BUILDDIR
-success prepare_image BOOTFS_IMAGE
-success prepare_image ROOTFS_IMAGE
+success prepare_image BOOTFS_REF
+success prepare_image ROOTFS_REF
 #
 # we might use some advanced mechanism like getopt here
 if [ "x$1" = "x" ]; then

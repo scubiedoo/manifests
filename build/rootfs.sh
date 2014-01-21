@@ -2,7 +2,7 @@
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from build.sh" 1>&2; exit 1; }
 
 build_ok invoked $0
-eval "`load_configuration \"${ROOTFS_IMAGE[DIR]}\"`"
+eval "`load_configuration \"${ROOTFS_REF[DIR]}\"`"
 
 function setupChroot()
 {
@@ -30,7 +30,7 @@ function build_rootfs()
 	rootfs="$1"
 	
 	# we nee the -E flag to pass through http_proxy
-	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_IMAGE} ${ROOTFS_SOURCE};"
+	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_REF} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
 	success sudo tar xzf ${ROOTFS_FILE}
 	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/

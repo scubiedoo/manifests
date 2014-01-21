@@ -3,16 +3,16 @@
 
 build_set MAKE "make -j 4"
 
-echo "declare -A BOOTFS_IMAGE"
-build_set BOOTFS_IMAGE[FILE] "/vagrant/vm/bootfs.img"
-build_set BOOTFS_IMAGE[SIZE] "16M"
-build_set BOOTFS_IMAGE[DIR] "/mnt/image_boot"
-build_set BOOTFS_IMAGE[FS] "vfat"
+echo "declare -A BOOTFS_REF"
+build_set BOOTFS_REF[FILE] "/vagrant/vm/bootfs_reference.img"
+build_set BOOTFS_REF[SIZE] "16M"
+build_set BOOTFS_REF[DIR] "/mnt/bootfs_ref"
+build_set BOOTFS_REF[FS] "vfat"
 
-echo "declare -A ROOTFS_IMAGE"
-build_set ROOTFS_IMAGE[FILE] "/vagrant/vm/rootfs.img"
-build_set ROOTFS_IMAGE[SIZE] "4G"
-build_set ROOTFS_IMAGE[DIR] "/mnt/image_rootfs"
-build_set ROOTFS_IMAGE[FS] "ext4"
-build_set ROOTFS_IMAGE[FS_OPTS] "-F"
+echo "declare -A ROOTFS_REF"
+build_set ROOTFS_REF[FILE] "/vagrant/vm/rootfs_reference.img"
+build_set ROOTFS_REF[SIZE] "4G"
+build_set ROOTFS_REF[DIR] "/mnt/rootfs_ref"
+build_set ROOTFS_REF[FS] "ext4"
+build_set ROOTFS_REF[FS_OPTS] "-F"
 
