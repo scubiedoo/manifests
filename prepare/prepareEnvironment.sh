@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# see build.sh for idea of this line
+#
+ls `dirname $0`/build.api.sh &> /dev/null || { echo "restarting command: $@" ; exec /vagrant/prepare/prepareEnvironment.sh $@; exit $?; }
+
+# START
+#
 export VAGRANT_PROVISION=1
 
 STARTDIR=`pwd`
@@ -6,16 +13,7 @@ SRCDIR="/vagrant"
 cd $SRCDIR
 source "$SRCDIR/build.api.sh"
 
-# config parameter
-#
-BUILDDIR="/mnt/builddisk"
-
-
-# read configuration file
-#
-CONFIGFILE="$SRCDIR/prepare/prepareEnvironment.config.sh"
-success chmod a+x $CONFIGFILE
-eval `$CONFIGFILE`
+eval `load_configuration`
 
 #
 #

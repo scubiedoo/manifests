@@ -123,3 +123,36 @@ build_debug "`set`"
 	}
 }
 export -f load_configuration
+
+#
+# trap handling
+# not so nice: chokes on ; in strings etc, but fits my purposes for now
+# better idea might be "trap trap_handler_function $(declare -p array)"
+# then recreate the array from array_string in trap_handler and have a fancy output while executing functions
+# same goes for trap_push/pop
+#
+function trap_push()
+{
+	local new_cmd old_cmds str
+	new_cmd="$1"
+	
+	old_cmds=`trap -p EXIT | cut -d '\'' -f 2`
+	echo $old_cmds
+	str="'$new_cmd;$old_cmds'"
+	eval "trap $str EXIT"
+}
+
+function trap_pop()
+{
+	local old_cmds str
+
+	old_cmds=`trap -p EXIT |cut -d "'" -f 2`
+	old_cmds=`echo $old_cmds |cut -d ';' -f 2-`
+	str="'$old_cmds'"
+	eval "trap $str EXIT"
+}
+
+function trap_handler()
+{
+	build_ok "cleaning up"
+}

@@ -1,9 +1,5 @@
 #!/bin/bash
-export VAGRANT_PROVISION=1
-STARTDIR=`pwd`
-SRCDIR="/vagrant"
-cd ${SRCDIR}
-source "$SRCDIR/build.api.sh"
+[ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from build.sh" 1>&2; exit 1; }
 
 build_info running compile.sh
 eval "`load_configuration $@`"

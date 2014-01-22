@@ -5,7 +5,7 @@ build_set MAKE "make -j 4"
 
 echo "declare -A BOOTFS_REF"
 build_set BOOTFS_REF[FILE] "/vagrant/vm/bootfs_reference.img"
-build_set BOOTFS_REF[SIZE] "16M"
+build_set BOOTFS_REF[SIZE] "15M"
 build_set BOOTFS_REF[DIR] "/mnt/bootfs_ref"
 build_set BOOTFS_REF[FS] "vfat"
 
