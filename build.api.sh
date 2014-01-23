@@ -131,28 +131,82 @@ export -f load_configuration
 # then recreate the array from array_string in trap_handler and have a fancy output while executing functions
 # same goes for trap_push/pop
 #
+function trap_cmds()
+{
+	local -a cmds
+	IFS='#'
+	cmds=($@)
+	
+	# we want to transform
+	# declare -a cmds='([0]="some command")'
+	# into
+	# ([0]="some command")
+	local cmdstr
+	cmdstr=`declare -p cmds |cut -d"'" -f 2- `
+	cmdstr=${cmdstr%\'*}
+	
+	trap "trap_handler '$cmdstr'" EXIT
+echo `trap -p EXIT`
+}
+
+function trap_cmdstr()
+{
+	local old_cmdstr
+	# trap -- 'trap_handler '\''([0]="cmd string")'\''' EXIT
+	old_cmdstr=`trap -p EXIT |cut -d"'" -f 2-`
+	old_cmdstr=${old_cmdstr%\'*}
+	
+	old_cmdstr=`echo ${old_cmdstr#trap_handler}`
+	echo $old_cmdstr
+}
 function trap_push()
 {
-	local new_cmd old_cmds str
+echo "PUSH: $1"
+	local new_cmd old_cmdstr str
 	new_cmd="$1"
+
+	old_cmdstr=`trap_cmdstr`
+
+echo "O:$old_cmdstr"
 	
-	old_cmds=`trap -p EXIT | cut -d '\'' -f 2`
-	echo $old_cmds
-	str="'$new_cmd;$old_cmds'"
-	eval "trap $str EXIT"
+	local -a cmds
+	IFS='#'
+	cmds=( ${old_cmdstr} )
+	cmds=( "$new_cmd" ${old_cmdstr[@]} )
+
+	trap_cmds ${cmds[@]}
 }
 
 function trap_pop()
 {
-	local old_cmds str
+echo "POP"
+	local old_cmdstr str
 
-	old_cmds=`trap -p EXIT |cut -d "'" -f 2`
-	old_cmds=`echo $old_cmds |cut -d ';' -f 2-`
-	str="'$old_cmds'"
-	eval "trap $str EXIT"
+	old_cmdstr=`trap_cmdstr`
+
+echo "P:$old_cmdstr"
+	local -a cmds
+	IFS='#'
+	cmds=(${old_cmdstr})
+	unset cmds[0]
+	
+	trap_cmds ${cmds[@]}
 }
 
 function trap_handler()
 {
 	build_ok "cleaning up"
+
+echo "$*"
+	local -a cmds
+	IFS='#'
+	local cmdstr
+	cmdstr=`echo $*`
+echo $cmdstr
+	cmdstr=`eval echo $cmdstr`
+	cmds=`( eval $cmdstr )`
+	for c in ${cmds[@]}; do
+echo $c
+		execute $c
+	done
 }
