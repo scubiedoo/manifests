@@ -126,87 +126,41 @@ export -f load_configuration
 
 #
 # trap handling
-# not so nice: chokes on ; in strings etc, but fits my purposes for now
-# better idea might be "trap trap_handler_function $(declare -p array)"
-# then recreate the array from array_string in trap_handler and have a fancy output while executing functions
-# same goes for trap_push/pop
+# not so nice: uses a global variable.
+# i'd prefer an "inline solution":
+# saving all information in the trap call
+# trap "trap_handle (cmd1;cmd2;...)"
 #
-function trap_cmds()
-{
-	local -a cmds
-	IFS='#'
-	cmds=($@)
-	
-	# we want to transform
-	# declare -a cmds='([0]="some command")'
-	# into
-	# ([0]="some command")
-	local cmdstr
-	cmdstr=`declare -p cmds |cut -d"'" -f 2- `
-	cmdstr=${cmdstr%\'*}
-	
-	trap "trap_handler '$cmdstr'" EXIT
-echo `trap -p EXIT`
-}
+declare -a TRAP_CMDS
+export TRAP_CMDS
 
-function trap_cmdstr()
-{
-	local old_cmdstr
-	# trap -- 'trap_handler '\''([0]="cmd string")'\''' EXIT
-	old_cmdstr=`trap -p EXIT |cut -d"'" -f 2-`
-	old_cmdstr=${old_cmdstr%\'*}
-	
-	old_cmdstr=`echo ${old_cmdstr#trap_handler}`
-	echo $old_cmdstr
-}
 function trap_push()
 {
-echo "PUSH: $1"
 	local new_cmd old_cmdstr str
 	new_cmd="$1"
-
-	old_cmdstr=`trap_cmdstr`
-
-echo "O:$old_cmdstr"
 	
-	local -a cmds
+	build_info "PUSH: $new_cmd"
 	IFS='#'
-	cmds=( ${old_cmdstr} )
-	cmds=( "$new_cmd" ${old_cmdstr[@]} )
+	TRAP_CMDS=( "${new_cmd}" ${TRAP_CMDS[@]} )
 
-	trap_cmds ${cmds[@]}
+	trap "trap_handler" EXIT
 }
 
 function trap_pop()
 {
-echo "POP"
-	local old_cmdstr str
-
-	old_cmdstr=`trap_cmdstr`
-
-echo "P:$old_cmdstr"
-	local -a cmds
-	IFS='#'
-	cmds=(${old_cmdstr})
-	unset cmds[0]
+	build_info "POP"
 	
-	trap_cmds ${cmds[@]}
+	unset TRAP_CMDS[0]
+	IFS='#'
+	TRAP_CMDS=( ${TRAP_CMDS[@]} )
 }
 
 function trap_handler()
 {
 	build_ok "cleaning up"
 
-echo "$*"
-	local -a cmds
 	IFS='#'
-	local cmdstr
-	cmdstr=`echo $*`
-echo $cmdstr
-	cmdstr=`eval echo $cmdstr`
-	cmds=`( eval $cmdstr )`
-	for c in ${cmds[@]}; do
-echo $c
-		execute $c
+	for c in ${TRAP_CMDS[@]}; do
+		execute "$c"
 	done
 }

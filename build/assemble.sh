@@ -54,12 +54,15 @@ function assemble_image
 	# that's it
 	local RET
 	success sudo kpartx -a ${IMAGE}
-	trap_push "sudo kpartx -d ${IMAGE}"
+	trap_push "sleep 1;sudo kpartx -d ${IMAGE}"
 		local image_dir
 		image_dir="/mnt/rootfs_image"
 		success sudo mkdir -p ${image_dir}
-
-		success sudo mount ${IMAGE} ${image_dir} -o offset=16M
+		
+		local device
+		device="/dev/mapper/`sudo kpartx -l ${IMAGE} |grep p2 |cut -d' ' -f 1`"
+		success sudo mkfs.${ROOTFS_REF[FS]} ${ROOTFS_REF[FS_OPTS]} ${device}
+		success sudo mount ${device} ${image_dir}
 		trap_push "sudo umount ${image_dir}"
 			local temp_file
 			temp_file="/vagrant/vm/rootfs_image.tar"

@@ -2,7 +2,7 @@
 
 # see build.sh for idea of this line
 #
-ls `dirname $0`/build.api.sh &> /dev/null || { echo "restarting command: $@" ; exec /vagrant/prepare/prepareEnvironment.sh $@; exit $?; }
+ls `dirname $0`/../build.api.sh &> /dev/null || { echo "restarting command: $@" ; exec /vagrant/prepare/prepareEnvironment.sh $@; exit $?; }
 
 # START
 #
