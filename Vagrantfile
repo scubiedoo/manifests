@@ -8,6 +8,5 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--cpus", "4"]   
   end
   
-  config.vm.provision :shell, path: "prepare/prepareEnvironment.sh"
   config.vm.provision :shell, path: "build.sh", :privileged => false
 end

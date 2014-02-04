@@ -28,6 +28,7 @@ function create_image()
 		success dd if=/dev/zero of=${image} bs=1 seek=${size} count=1; 
 	}
 	
+	# check filesystem type of image file
 	str=`blkid -o value -s TYPE ${image}`
 	execute [ "x${str}" = "x${fs}" ] || {
 		# Filesystem

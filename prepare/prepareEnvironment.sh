@@ -1,19 +1,7 @@
 #!/bin/bash
+[ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from build.sh" 1>&2; exit 1; }
 
-# see build.sh for idea of this line
-#
-ls `dirname $0`/../build.api.sh &> /dev/null || { echo "restarting command: $@" ; exec /vagrant/prepare/prepareEnvironment.sh $@; exit $?; }
-
-# START
-#
-export VAGRANT_PROVISION=1
-
-STARTDIR=`pwd`
-SRCDIR="/vagrant"
-cd $SRCDIR
-source "$SRCDIR/build.api.sh"
-
-eval `load_configuration`
+eval "`load_configuration`"
 
 #
 #
@@ -53,6 +41,6 @@ function prepareDisk()
 # i want to use an extra image file in order to have the possibility to run vagrant destroy and recreate my image.
 # but i don't want to lose my compiled files and images
 # 
-prepareDisk /vagrant/vm/builddisk.img $BUILDDIR
-success mkdir -p $BUILDDIR/vagrant
-chown vagrant $BUILDDIR/vagrant
+prepareDisk /vagrant/vm/builddisk.img `dirname $BUILDDIR`
+success mkdir -p $BUILDDIR
+chown vagrant $BUILDDIR

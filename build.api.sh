@@ -9,9 +9,6 @@ export BUILD_CLR_RED="${BUILD_CLR_ESC}[0;31m"
 export BUILD_CLR_BLUE="${BUILD_CLR_ESC}[0;34m"
 export BUILD_CLR_RST=`echo -en "${BUILD_CLR_ESC}[m\000"`
 
-# i need to set this configuration here, because prepareEnvironment uses this script too
-export BUILD_DEBUG=3
-
 # COPY START http://blog.yjl.im/2012/01/printing-out-call-stack-in-bash.html
 # 
 # Copyright 2012 Yu-Jie Lin
@@ -126,41 +123,56 @@ export -f load_configuration
 
 #
 # trap handling
+# i use this as a "try... finally" mechanism
+#
 # not so nice: uses a global variable.
 # i'd prefer an "inline solution":
 # saving all information in the trap call
-# trap "trap_handle (cmd1;cmd2;...)"
+# trap "trap_handle (...;cmd2;cmd1)" EXIT
+#
+# function trap_handle { parse $1; execute cmds[@] }
 #
 declare -a TRAP_CMDS
 export TRAP_CMDS
 
 function trap_push()
 {
-	local new_cmd old_cmdstr str
+	local new_cmd store_ifs
 	new_cmd="$1"
 	
 	build_info "PUSH: $new_cmd"
+	
+	store_ifs=${IFS}
 	IFS='#'
 	TRAP_CMDS=( "${new_cmd}" ${TRAP_CMDS[@]} )
+	IFS=${store_ifs}
 
 	trap "trap_handler" EXIT
 }
 
 function trap_pop()
 {
-	build_info "POP"
-	
+	local store_ifs
+	build_info "POP ${TRAP_CMDS[0]}"
+
 	unset TRAP_CMDS[0]
+	store_ifs=${IFS}
 	IFS='#'
 	TRAP_CMDS=( ${TRAP_CMDS[@]} )
+	IFS=${store_ifs}
 }
 
 function trap_handler()
 {
+	local store_ifs
 	build_ok "cleaning up"
 
+	store_ifs=${IFS}
 	IFS='#'
 	for c in ${TRAP_CMDS[@]}; do
+		IFS=${store_ifs}
 		execute "$c"
+		IFS='#'
 	done
+	IFS=${store_ifs}
 }
