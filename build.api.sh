@@ -9,6 +9,11 @@ export BUILD_CLR_RED="${BUILD_CLR_ESC}[0;31m"
 export BUILD_CLR_BLUE="${BUILD_CLR_ESC}[0;34m"
 export BUILD_CLR_RST=`echo -en "${BUILD_CLR_ESC}[m\000"`
 
+# build.sh needs to set BUILD_DEBUG
+# therefore, while using the load_configuration mechanism i need an 
+readonly DEFAULT_DEBUG=1
+export DEFAULT_DEBUG
+
 # COPY START http://blog.yjl.im/2012/01/printing-out-call-stack-in-bash.html
 # 
 # Copyright 2012 Yu-Jie Lin
@@ -33,31 +38,30 @@ function build_out()
 export -f build_out
 function build_err()
 {
-	if [ $BUILD_DEBUG -gt 0 ]; then 
+	if [ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 0 ]; then 
 		build_out "${BUILD_CLR_RED}${@}${BUILD_CLR_RST}"
 		LSLOGSTACK 
 		exit 1
 	fi
 }
 export -f build_err
-function build_info()
-{
-	if [ $BUILD_DEBUG -gt 1 ]; then 
-		build_out "${BUILD_CLR_YELLOW}${@}${BUILD_CLR_RST}"
-	fi
-}
-export -f build_info
 function build_ok()
 {
-	if [ $BUILD_DEBUG -gt 2 ]; then 
+	if [ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 1 ]; then 
 		build_out "${BUILD_CLR_GREEN}${@}${BUILD_CLR_RST}"
 	fi
 }
 export -f build_ok
-
+function build_info()
+{
+	if [ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 2 ]; then 
+		build_out "${BUILD_CLR_YELLOW}${@}${BUILD_CLR_RST}"
+	fi
+}
+export -f build_info
 function build_debug()
 {
-	if [ $BUILD_DEBUG -gt 3 ]; then 
+	if [ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 3 ]; then 
 		build_out "${BUILD_CLR_BLUE}${@}${BUILD_CLR_RST}"
 	fi
 }
@@ -145,9 +149,9 @@ function trap_push()
 	store_ifs=${IFS}
 	IFS='#'
 	TRAP_CMDS=( "${new_cmd}" ${TRAP_CMDS[@]} )
-	IFS=${store_ifs}
 
 	trap "trap_handler" EXIT
+	IFS=${store_ifs}
 }
 
 function trap_pop()
@@ -155,7 +159,9 @@ function trap_pop()
 	local store_ifs
 	build_info "POP ${TRAP_CMDS[0]}"
 
+	execute "${TRAP_CMDS[0]}"
 	unset TRAP_CMDS[0]
+
 	store_ifs=${IFS}
 	IFS='#'
 	TRAP_CMDS=( ${TRAP_CMDS[@]} )
@@ -170,9 +176,7 @@ function trap_handler()
 	store_ifs=${IFS}
 	IFS='#'
 	for c in ${TRAP_CMDS[@]}; do
-		IFS=${store_ifs}
 		execute "$c"
-		IFS='#'
 	done
 	IFS=${store_ifs}
 }

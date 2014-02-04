@@ -10,9 +10,9 @@ function createDisk()
 	local disk
 	disk=$1
 	# remember: blocksize=1K * seek=10M => 10GB disksize
-	success dd if=/dev/zero of=$disk  bs=1K seek=10M count=1
+	success sudo dd if=/dev/zero of=$disk  bs=1K seek=10M count=1
 	# we create ext2 because ignore journalling and stuff
-	success mkfs.ext2 -F $disk
+	success sudo mkfs.ext2 -F $disk
 }
 #
 #
@@ -28,19 +28,19 @@ function prepareDisk()
 	device="`mount |grep \"$mountpoint\"`"
 	RET=$?
 	if [ $RET != 0 ]; then
-		success mkdir -p $mountpoint
+		success sudo mkdir -p $mountpoint
 			
-		device=`losetup -f`
+		device=`sudo losetup -f`
 		RET=$?
 		success "[ -n $device ] || echo 'no more loop devices'"
-		success	losetup $device $disk
-		success mount -t ext2 $device $mountpoint
+		success	sudo losetup $device $disk
+		success sudo mount -t ext2 $device $mountpoint
 	fi
 }
 
 # i want to use an extra image file in order to have the possibility to run vagrant destroy and recreate my image.
 # but i don't want to lose my compiled files and images
 # 
-prepareDisk /vagrant/vm/builddisk.img `dirname $BUILDDIR`
+prepareDisk $BUILDDISK `dirname $BUILDDIR`
 success mkdir -p $BUILDDIR
 chown vagrant $BUILDDIR

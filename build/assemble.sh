@@ -54,14 +54,14 @@ function assemble_image
 	# i extract the tar file to my smaller rootfs... which should be big enough to hold all data
 	# that's it
 	local RET
-	success sudo kpartx -a ${TMPIMAGE}
-	trap_push "sleep 1;sudo kpartx -d ${TMPIMAGE}"
+	success sudo kpartx -s -a ${TMPIMAGE}
+	trap_push "sleep 1;sudo kpartx -s -d ${TMPIMAGE}"
 		local image_dir
 		image_dir="/mnt/rootfs_image"
 		success sudo mkdir -p ${image_dir}
 		
 		# output of kpartx looks like this
-		# i need the used loop-device name used in /dev/mapper
+		# i need the chosen loop-device name used in /dev/mapper
 		#sudo kpartx -l /tmp/file.img
 		#loop3p1 : 0 28672 /dev/loop3 2048
 		#loop3p2 : 0 200704 /dev/loop3 30720
@@ -77,8 +77,6 @@ function assemble_image
 		
 			success cd ${image_dir}
 			success sudo tar -xf ${temp_file}
-			success cd ${BUILDDIR}
-			success "sudo umount ${image_dir}"
 		trap_pop
 	trap_pop
 	

@@ -23,7 +23,6 @@ export SRCDIR
 
 cd $SRCDIR
 source "$SRCDIR/build.api.sh"
-
 eval `load_configuration`
 
 source prepare/prepareEnvironment.sh

@@ -3,8 +3,8 @@
 
 # config parameter
 #
-build_export BUILDDIR "/mnt/builddisk/vagrant"
 build_export BUILD_DEBUG 3
+build_export BUILDDIR "/mnt/builddisk/vagrant"
 
 build_export http_proxy ""
 build_export https_proxy ""
