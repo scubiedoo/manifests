@@ -66,20 +66,20 @@ success prepare_image ROOTFS_REF
 # we might use some advanced mechanism like getopt here
 if [ "x$1" = "x" ]; then
 	cd $BUILDDIR
-	source ${SRCDIR}/build/uboot.sh
+	source ${SRCDIR}/compile/uboot.sh
 
 	cd $BUILDDIR
-	source ${SRCDIR}/build/kernel.sh
+	source ${SRCDIR}/compile/kernel.sh
 
 	cd $BUILDDIR
-	source ${SRCDIR}/build/rootfs.sh
+	source ${SRCDIR}/compile/rootfs.sh
 
 	cd $BUILDDIR
-	source ${SRCDIR}/build/assemble.sh
+	source ${SRCDIR}/compile/assemble.sh
 else
 	while [ $# -gt 0 ]; do
 		cd $BUILDDIR
-		source ${SRCDIR}/build/$1.sh
+		source ${SRCDIR}/compile/$1.sh
 		shift
 	done
 fi

@@ -26,7 +26,7 @@ source "$SRCDIR/build.api.sh"
 eval `load_configuration`
 
 source prepare/prepareEnvironment.sh
-source build/compile.sh $@
+source compile/compile.sh $@
 
 
 #apt-get install bc units kpartx 
