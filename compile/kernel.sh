@@ -27,8 +27,18 @@ function build_kernel()
 	build_ok built kernel
 }
 
+function deploy_kernel()
+{
+	build_ok deploying kernel
+	
+	build_ok kernel deployed
+}
+
 cd ${BUILDDIR}
 success get_kernel
 
 cd ${BUILDDIR}
 success build_kernel
+
+cd ${BUILDDIR}
+success deploy_kernel
