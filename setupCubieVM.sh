@@ -9,6 +9,8 @@ PACKAGELIST=" \
 	kpartx \
 	u-boot-tools \
 	ncurses-dev \
+	units \
+	bc \
 	"
 
 run_ok()

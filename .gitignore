@@ -5,3 +5,5 @@
 /vm/*.box
 
 /vm/*.img
+/vm
+/*.img
