@@ -19,9 +19,9 @@ function build_uenv()
 {
 	build_ok building uEnv.txt
 	if [ -r compile/uEnv.txt ]; then
-		success sudo cp -f ${SRCDIR}/compile/uEnv.txt ${BOOTFS_REF[DIR]}
+		success sudo cp -f ${SRCDIR}/compile/uEnv.txt ${BOOTFS_REF[DIR]}/uEnv.txt
 	else
-		success sudo cp -f ${SRCDIR}/compile/uEnv.default.txt ${BOOTFS_REF[DIR]}
+		success sudo cp -f ${SRCDIR}/compile/uEnv.default.txt ${BOOTFS_REF[DIR]}/uEnv.txt
 	fi
 	# TODO an interaction might be nice to ask for the user's config, like make menuconfig for the kernel
 	# 
