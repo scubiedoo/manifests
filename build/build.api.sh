@@ -6,7 +6,7 @@ export BUILD_CLR_ESC=`echo -en "\033"`
 export BUILD_CLR_GREEN="${BUILD_CLR_ESC}[0;32m"
 export BUILD_CLR_YELLOW="${BUILD_CLR_ESC}[0;33m"
 export BUILD_CLR_RED="${BUILD_CLR_ESC}[0;31m"
-export BUILD_CLR_BLUE="${BUILD_CLR_ESC}[0;34m"
+export BUILD_CLR_BLUE="${BUILD_CLR_ESC}[1;34m"
 export BUILD_CLR_RST=`echo -en "${BUILD_CLR_ESC}[m\000"`
 
 # build.sh needs to set BUILD_DEBUG
@@ -41,8 +41,8 @@ function build_err()
 	if [ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 0 ]; then 
 		build_out "${BUILD_CLR_RED}${@}${BUILD_CLR_RST}"
 		LSLOGSTACK 
-		exit 1
 	fi
+	exit 1
 }
 export -f build_err
 function build_ok()

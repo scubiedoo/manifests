@@ -3,16 +3,6 @@
 
 eval "`load_configuration $@`"
 
-function get_kernel()
-{
-	build_ok getting kernel
-	success "[ -d linux-sunxi ] || git clone ${KERNEL_GIT}"
-	cd linux-sunxi
-	success git checkout ${KERNEL_GIT_BRANCH}
-	success "[ -r .config ] || make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- sun7i_defconfig"
-	build_ok got kernel
-}
-
 function build_kernel()
 {
 	build_ok building kernel
@@ -35,7 +25,8 @@ function deploy_kernel()
 }
 
 cd ${BUILDDIR}
-success get_kernel
+success sync_git "linux-sunxi" ${KERNEL_GIT} ${KERNEL_GIT_BRANCH}
+success "[ -r linux-sunxi/.config ] || { cd linux-sunxi; make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- sun7i_defconfig ; }"
 
 cd ${BUILDDIR}
 success build_kernel

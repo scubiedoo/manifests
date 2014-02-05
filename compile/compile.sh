@@ -54,6 +54,25 @@ function prepare_image
 	build_ok prepared image
 }
 
+function sync_git()
+{
+	local last_dir git_dir git_src git_branch
+	build_ok sync_git 
+	
+	git_dir="$1"
+	git_src="$2"
+	git_branch="${3-master}"
+	success "[ -d ${git_dir} ] || git clone ${git_src}"
+	
+	last_dir=`pwd`
+	success cd ${git_dir}
+	trap_push "cd ${last_dir}"
+		success git checkout ${git_branch}
+	trap_pop
+
+	build_ok synced git
+}
+
 #
 # main part
 #
@@ -67,6 +86,9 @@ success prepare_image ROOTFS_REF
 if [ "x$1" = "x" ]; then
 	cd $BUILDDIR
 	source ${SRCDIR}/compile/uboot.sh
+
+	cd $BUILDDIR
+	source ${SRCDIR}/compile/boot.scr.sh
 
 	cd $BUILDDIR
 	source ${SRCDIR}/compile/kernel.sh
