@@ -13,7 +13,7 @@ function calc_needed_size()
 	
 	# might be better to have some more space for writing
 	local extra_space=100
-	echo "( ${size} + ${additional_size} + ( ${extra_space} * 1024 * 1024 ) ) / 1024" |bc
+	echo "( ( ${size} * 1024 ) + ${additional_size} + ( ${extra_space} * 1024 * 1024 ) ) / 1024" |bc
 }
 
 function assemble_image

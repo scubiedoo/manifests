@@ -20,7 +20,7 @@ function build_kernel()
 function deploy_kernel()
 {
 	build_ok deploying kernel
-	
+	success sudo cp -f linux-sunxi/arch/arm/boot/uImage ${BOOTFS_REF[DIR]}
 	build_ok kernel deployed
 }
 

@@ -8,5 +8,10 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--cpus", "4"]   
   end
   
-  config.vm.provision :shell, path: "manifests.sh", :privileged => false
+  config.vm.provision :shell, :privileged => false, :inline => <<-SH
+  export http_proxy=ENV['HTTP_PROXY']
+  export https_proxy=ENV['HTTPS_PROXY']
+  export ftp_proxy=ENV['FTP_PROXY']
+  /vagrant/manifests.sh
+SH  
 end

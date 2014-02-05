@@ -15,8 +15,24 @@ function build_uboot()
 	build_ok built uboot
 }
 
+function build_uenv()
+{
+	build_ok building uEnv.txt
+	if [ -r compile/uEnv.txt ]; then
+		success sudo cp -f ${SRCDIR}/compile/uEnv.txt ${BOOTFS_REF[DIR]}
+	else
+		success sudo cp -f ${SRCDIR}/compile/uEnv.default.txt ${BOOTFS_REF[DIR]}
+	fi
+	# TODO an interaction might be nice to ask for the user's config, like make menuconfig for the kernel
+	# 
+	build_ok built uEnv.txt
+}
+
 cd ${BUILDDIR}
 success sync_git "u-boot-sunxi" ${UBOOT_GIT} ${UBOOT_GIT_BRANCH}
 
 cd ${BUILDDIR}
 success build_uboot
+
+cd ${BUILDDIR}
+success build_uenv
