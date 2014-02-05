@@ -77,9 +77,11 @@ if [ "x$1" = "x" ]; then
 	cd $BUILDDIR
 	source ${SRCDIR}/compile/assemble.sh
 else
+	ARG=""
 	while [ $# -gt 0 ]; do
 		cd $BUILDDIR
-		source ${SRCDIR}/compile/$1.sh
-		shift
+		ARG=$1
+		shift # shift first... otherwise $1=compile will result in endless loop
+		source ${SRCDIR}/compile/$ARG.sh
 	done
 fi

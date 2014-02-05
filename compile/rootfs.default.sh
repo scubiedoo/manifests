@@ -9,11 +9,3 @@ build_set ROOTFS_INTERACTIVE 0
 build_set ROOTFS_SCRIPTS "\
 	adduser.sh \
 	"
-
-echo "declare -A BUILDFS_IMAGE"
-build_set BUILDFS_IMAGE[FILE] "/vagrant/vm/buildfs.img"
-build_set BUILDFS_IMAGE[SIZE] "8G"
-build_set BUILDFS_IMAGE[DIR] "/mnt/image_buildfs"
-build_set BUILDFS_IMAGE[FS] "ext2"
-build_set BUILDFS_IMAGE[FS_OPTS] "-F"
-

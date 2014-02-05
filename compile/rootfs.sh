@@ -6,20 +6,33 @@ eval "`load_configuration \"${ROOTFS_REF[DIR]}\"`"
 
 function setupChroot()
 {
-	local rootfs
+	local rootfs last_dir
 	rootfs="$1"
+	last_dir=`pwd`
 
-	mv ${rootfs}/etc/resolv.conf ${rootfs}/etc/resolv.conf.orig
-	cp /etc/resolv.conf .${rootfs}/etc/resolv.conf
-	mount -o bind /proc .${rootfs}/proc
-	mount -o bind /dev .${rootfs}/dev
-	mount -o bind /dev/pts ${rootfs}/dev/pts
-	mount -o bind /sys ${rootfs}/sys
-	chroot ${rootfs}
-	umount ${rootfs}/sys
-	umount ${rootfs}/dev/pts
-	umount ${rootfs}/dev
-	umount ${rootfs}/proc
+	success cd ${rootfs}
+	trap_push "cd ${last_dir}"
+		success sudo mv ${rootfs}/etc/resolv.conf ${rootfs}/etc/resolv.conf.orig
+		trap_push "sudo mv ${rootfs}/etc/resolv.conf.orig ${rootfs}/etc/resolv.conf"
+			success sudo cp /etc/resolv.conf ${rootfs}/etc/resolv.conf
+			
+			success sudo mount -o bind /proc ${rootfs}/proc
+			trap_push "sudo umount ${rootfs}/proc"
+				success sudo mount -o bind /dev ${rootfs}/dev
+				trap_push "sudo umount ${rootfs}/dev"
+					success sudo mount -o bind /dev/pts ${rootfs}/dev/pts
+					trap_push "sudo umount ${rootfs}/dev/pts"
+						success sudo mount -o bind /sys ${rootfs}/sys
+						trap_push "sudo umount ${rootfs}/sys"
+						
+							# now we can actually chroot :D
+							success sudo chroot ${rootfs} "$SHELL -i"
+						trap_pop
+					trap_pop
+				trap_pop
+			trap_pop
+		trap_pop
+	trap_pop
 }
 
 function build_rootfs()
@@ -54,7 +67,7 @@ function setup_rootfs()
 		}
 	done
 	if [ ${ROOTFS_INTERACTIVE} = 1 ]; then
-		success sudo chroot ${rootfs} "$SHELL -i"
+		success setupChroot ${rootfs}
 	fi
 
 	build_ok setting up rootfs $1
