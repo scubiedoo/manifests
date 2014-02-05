@@ -50,7 +50,7 @@ function build_rootfs()
 	# we nee the -E flag to pass through http_proxy
 	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_REF} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
-	success sudo tar xzf ${ROOTFS_FILE}
+	success sudo tar xkzf ${ROOTFS_FILE}
 	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
 	
 	build_ok built rootfs $1
@@ -68,7 +68,7 @@ function copy_kernel_modules()
 
 	success sudo mkdir -p ${rootfs}/lib/modules
 	success sudo rm -rf ${rootfs}/lib/modules/
-	success sudo cp -vr linux-sunxi/output/lib ${rootfs}
+	success sudo cp -r linux-sunxi/output/lib ${rootfs}
 }
 
 function setup_rootfs()
