@@ -62,6 +62,7 @@ function build_rootfs()
 # i am totally unsure whether this is the right place...
 # maybe we should move this function to assemble.sh??
 # it might be moved to kernel.sh too... 
+# e.g. when working on the kernel and running "manifests.sh kernel assemble", the kernel modules will not be copied to the rootfs
 # or an own setup script...
 # any ideas?!
 #
@@ -73,6 +74,12 @@ function copy_kernel_modules()
 	success sudo mkdir -p ${rootfs}/lib/modules
 	success sudo rm -rf ${rootfs}/lib/modules/
 	success sudo cp -r linux-sunxi/output/lib ${rootfs}
+	cat > /tmp/modules << EOF
+
+EOF
+	success "[ $? = 0 ] || { build_err \"failed to created /tmp/modules\" ; }"
+	success "echo \"${KERNEL_BOOT_MODULES}\" >> /tmp/modules"
+	success sudo cp /tmp/modules ${rootfs}/etc/modules
 }
 
 function setup_rootfs()

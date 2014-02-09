@@ -5,6 +5,6 @@ source build/build.api.sh
 eval "`load_configuration $@`"
 
 source build/prepareEnvironment.sh
-source compile/compile.sh $@
+source compile/compile.sh
 
 #apt-get install bc units kpartx 

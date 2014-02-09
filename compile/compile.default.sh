@@ -2,6 +2,7 @@
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
 build_set MAKE "make -j 4"
+build_set DEFAULT_TARGETS "uboot boot.scr kernel rootfs assemble"
 
 echo "declare -A BOOTFS_REF"
 build_set BOOTFS_REF[FILE] "/vagrant/vm/bootfs_reference.img"

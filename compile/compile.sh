@@ -83,27 +83,10 @@ success prepare_image BOOTFS_REF
 success prepare_image ROOTFS_REF
 #
 # we might use some advanced mechanism like getopt here
-if [ "x$1" = "x" ]; then
-	cd $BUILDDIR
-	source ${SRCDIR}/compile/uboot.sh
-
-	cd $BUILDDIR
-	source ${SRCDIR}/compile/boot.scr.sh
-
-	cd $BUILDDIR
-	source ${SRCDIR}/compile/kernel.sh
-
-	cd $BUILDDIR
-	source ${SRCDIR}/compile/rootfs.sh
-
-	cd $BUILDDIR
-	source ${SRCDIR}/compile/assemble.sh
-else
-	ARG=""
-	while [ $# -gt 0 ]; do
-		cd $BUILDDIR
-		ARG=$1
-		shift # shift first... otherwise $1=compile will result in endless loop
-		source ${SRCDIR}/compile/$ARG.sh
-	done
-fi
+echo ${DEFAULT_TARGETS}
+echo ${@-${DEFAULT_TARGETS}}
+for script in ${@-${DEFAULT_TARGETS}}; do
+	success [ -r ${SRCDIR}/compile/${script}.sh ]
+	success cd $BUILDDIR
+	source ${SRCDIR}/compile/${script}.sh
+done	
