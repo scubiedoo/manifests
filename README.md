@@ -95,26 +95,26 @@ Vagrant sets up a VirtualBox (which has been created before from [buildvm/README
 I did it on a Windows host, so the structure looks like this:
 
 <pre>
-+---------------------------------------------------------------
++--------------------------------------------------------------
 |Windows Host
 |
 | Vagrant starts the machine box.vdi
-|c:\VirtualBox\box.vdi         <--->+-----------------------
+|c:\VirtualBox\box.vdi         &lt;--->+-----------------------
 |                                   |Ubuntu 12.04(buildvm)
 | and maps the shared folder        |
-|d:\manifests\                 <---->/vagrant/
+|d:\manifests\                 &lt;---->/vagrant/
 |                                   |
 |                                   |creates image files for 
-|                                   |/vagrant/vm/builddisk.img    < mount > /mnt/builddisk
-|                                   |/vagrant/vm/bootfs_ref.img   < mount > /mnt/bootfs_ref
-|                                   |/vagrant/vm/rootfs_ref.img   < mount > /mnt/rootfs_ref
+|                                   |/vagrant/vm/builddisk.img    &lt; mount > /mnt/builddisk
+|                                   |/vagrant/vm/bootfs_ref.img   &lt; mount > /mnt/bootfs_ref
+|                                   |/vagrant/vm/rootfs_ref.img   &lt; mount > /mnt/rootfs_ref
 |                                   |
 |                                   |/mnt/rootfs_ref contains the cubieboard rootfs which can be accessed using chroot
 |                                   |during the rootfs creation process the files from setup are copied and executed inside the chroot
 |d:\manifests\setup   ---- copy ---->/mnt/rootfs_ref/root/setup
 |                                   |
 |                                   |finally, the image will be assemble into the following file
-|d:\manifests\generated.img <------- /vagrant/generated.img
+|d:\manifests\generated.img &lt;------- /vagrant/generated.img
 |                                   |
 
 </pre>
