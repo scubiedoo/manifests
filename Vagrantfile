@@ -13,5 +13,5 @@ Vagrant.configure("2") do |config|
   export https_proxy=ENV['HTTPS_PROXY']
   export ftp_proxy=ENV['FTP_PROXY']
   /vagrant/manifests.sh
-SH  
+SH
 end

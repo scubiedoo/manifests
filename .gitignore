@@ -9,3 +9,5 @@
 
 /vm
 /*.img
+
+/build/*.config.sh

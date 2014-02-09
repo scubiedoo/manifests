@@ -10,7 +10,7 @@ build_set SCRIPT_BOARDS_GIT_BRANCH "master"
 build_set SCRIPT_FEX_FILE "sunxi-boards/sys_config/a20/cubieboard2.fex"
 
 #
-# boot.scr stuff
+# boot.scr stuff, currently not used, but added just in case
 #
 build_set BUILD_BOOT_SCR 0
 build_set BOOT_CMD_EXTRA ""

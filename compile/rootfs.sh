@@ -2,14 +2,13 @@
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
 build_ok invoked $0
-eval "`load_configuration \"${ROOTFS_REF[DIR]}\"`"
+eval "`load_configuration`"
 
 function setupChroot()
 {
 	local rootfs last_dir
-	rootfs="$1"
+	rootfs="${ROOTFS_REF[DIR]}"
 	last_dir=`pwd`
-	shift
 	
 	success cd ${rootfs}
 	trap_push "cd ${last_dir}"
@@ -25,13 +24,16 @@ function setupChroot()
 					trap_push "sudo umount ${rootfs}/dev/pts"
 						success sudo mount -o bind /sys ${rootfs}/sys
 						trap_push "sudo umount ${rootfs}/sys"
-							# now we can actually chroot :D
-							for script in $@; do
-								execute sudo chroot ${rootfs} [ -r /root/setup/${script} ] && {
-									success sudo chmod a+x ${rootfs}/root/setup/${script} ;
-									success sudo chroot ${rootfs} /root/setup/${script} ;
-								}
-							done
+							success sudo mkdir -p ${rootfs}/vagrant
+							success sudo mount -o bind /vagrant ${rootfs}/vagrant
+							trap_push "sudo umount ${rootfs}/vagrant"
+								# now we can actually chroot :D
+								for script in $@; do
+									execute sudo chroot ${rootfs} [ -r /root/setup/${script} ] && {
+										success sudo chmod a+x ${rootfs}/root/setup/${script} ;
+										success sudo chroot ${rootfs} /root/setup/${script} ;
+									}
+								done
 						trap_pop
 					trap_pop
 				trap_pop
@@ -45,7 +47,7 @@ function build_rootfs()
 	build_ok building rootfs $1
 
 	local rootfs
-	rootfs="$1"
+	rootfs="${ROOTFS_REF[DIR]}"
 	
 	# we nee the -E flag to pass through http_proxy
 	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_REF} ${ROOTFS_SOURCE};"
@@ -59,12 +61,14 @@ function build_rootfs()
 #
 # i am totally unsure whether this is the right place...
 # maybe we should move this function to assemble.sh??
-# i might be moved to kernel.sh too... any ideas?!
+# it might be moved to kernel.sh too... 
+# or an own setup script...
+# any ideas?!
 #
 function copy_kernel_modules()
 {
 	local rootfs
-	rootfs="$1"
+	rootfs="${ROOTFS_REF[DIR]}"
 
 	success sudo mkdir -p ${rootfs}/lib/modules
 	success sudo rm -rf ${rootfs}/lib/modules/
@@ -75,25 +79,27 @@ function setup_rootfs()
 {
 	build_ok setting up rootfs $1
 	
-	local rootfs
-	rootfs="$1"
+	local rootfs interactive
+	rootfs="${ROOTFS_REF[DIR]}"
 	
 	success sudo mkdir -p ${rootfs}/root/setup
 	success sudo cp -a ${SRCDIR}/setup/* ${rootfs}/root/setup
-	success setupChroot ${rootfs} ${ROOTFS_SCRIPTS}
 	
+	interactive=""
 	if [ ${ROOTFS_INTERACTIVE} = 1 ]; then
-		success setupChroot ${rootfs} interactive.sh
+		interactive="interactive.sh"
 	fi
 
+	success setupChroot ${ROOTFS_SCRIPTS} ${interactive}
+	
 	build_ok setting up rootfs $1
 }
 
 cd ${BUILDDIR}
-success build_rootfs ${ROOTFS_DIR}
+success build_rootfs
 
 cd ${BUILDDIR}
-success copy_kernel_modules ${ROOTFS_DIR}
+success copy_kernel_modules
 
 cd ${BUILDDIR}
-success setup_rootfs ${ROOTFS_DIR}
+success setup_rootfs
