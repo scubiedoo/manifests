@@ -33,7 +33,7 @@ After installing all necessary tools, you have to do the following steps to buil
 
 1. For further builds, start the VirtualBox image and 
    - rerun the vagrant provisioning by calling `vagrant provision`
-   - ssh login to the virtual machine and run the build script `/vagrant/manifests.sh`  
+   - ssh login to the virtual machine (usr/pwd=`vagrant/vagrant`) and run the build script `/vagrant/manifests.sh`  
 
 # Motivation
 
