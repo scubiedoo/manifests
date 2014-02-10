@@ -109,11 +109,19 @@ I did it on a Windows host, so the structure looks like this:
 |                                   |/vagrant/vm/bootfs_ref.img   &lt; mount > /mnt/bootfs_ref
 |                                   |/vagrant/vm/rootfs_ref.img   &lt; mount > /mnt/rootfs_ref
 |                                   |
-|                                   |/mnt/rootfs_ref contains the cubieboard rootfs which can be accessed using chroot
-|                                   |during the rootfs creation process the files from setup are copied and executed inside the chroot
-|d:\manifests\setup   ---- copy ---->/mnt/rootfs_ref/root/setup
+|                                   |/mnt/rootfs_ref contains the cubieboard rootfs 
+|                                   |              | which can be accessed using chroot
+|                                   |              +-->+----------------------
+|                                   |                  | armhf chroot
+|                                   |                  | 
+|                                   |                  | 
+|                                   |                  | during the rootfs creation process 
+|                                   |                  | the files from setup are copied and
+|                                   |                  | executed inside the chroot
+|d:\manifests\setup   ---- copy ---->/mnt/rootfs_ref -->/root/setup
 |                                   |
-|                                   |finally, the image will be assemble into the following file
+|                                   |
+|                                   |finally, the image will be assembled into the following file
 |d:\manifests\generated.img &lt;------- /vagrant/generated.img
 |                                   |
 
