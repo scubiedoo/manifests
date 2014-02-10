@@ -23,7 +23,7 @@ For details refer to the developer's configuration section below.
 # How it works - developer part #
 
 The build process is designed to run reproducible and automatically from scratch.
-Therefore, it uses an automatically created VM ([buildvm/README.md](buildvm/README.md)) and a modular build script.
+Therefore, it uses an automatically created VM ([buildvm/README.md](../buildvm/README.md)) and a modular build script.
 
 ## Image files ##
 
@@ -91,7 +91,7 @@ perl my-configure.pl
 
 ## Setup overview ##
 
-Vagrant sets up a VirtualBox (which has been created before from [buildvm/README.md](buildvm/README.md)).
+Vagrant sets up a VirtualBox (which has been created before from [buildvm/README.md](../buildvm/README.md)).
 I did it on a Windows host, so the structure looks like this:
 
 <pre>
