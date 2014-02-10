@@ -13,7 +13,7 @@ PACKAGELIST=" \
 	bc \
 	"
 
-run_ok()
+success()
 {
 	local CMD
 	CMD="$@"
@@ -27,7 +27,7 @@ run_ok()
 	fi
 }
 
-run_ok sudo apt-get update
-run_ok sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+success sudo apt-get update
+success sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
-run_ok sudo apt-get install -y $PACKAGELIST
+success sudo apt-get install -y $PACKAGELIST
