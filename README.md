@@ -119,7 +119,7 @@ I did it on a Windows host, so the structure looks like this:
 |                                   |                  | the files from setup are copied and
 |                                   |                  | executed inside the chroot
 |d:\manifests\setup   ---- copy ---->/mnt/rootfs_ref -->/root/setup
-|                                   |
+|                                   |                  | 
 |                                   |
 |                                   |finally, the image will be assembled into the following file
 |d:\manifests\generated.img &lt;------- /vagrant/generated.img
