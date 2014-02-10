@@ -1,7 +1,7 @@
 
 # How to create the cubiuntu image - user part #
 
-Please install all necessary tools, refer to [master/README.md](master/README.md) for a list.
+Please install all necessary tools, refer to [master/README.md](../master/README.md) for a list.
 
 ## Step by step
 Under Windows: start the Virtual Machine by executing `startVM.bat`.<br>
