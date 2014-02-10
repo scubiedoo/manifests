@@ -3,19 +3,19 @@ A modular build environment for cubieboard image generation.
 
 # Prerequisites
 
-You need the following tools build a cubieboard image.
+You need the following tools to build a cubieboard image.
 
 - [https://www.virtualbox.org/](https://www.virtualbox.org/ "VirtualBox")<br>
-  VirtualBox is a well-known virtual machine, because we don't want to accidently do any harm our own host machine
+  VirtualBox is a well-known virtual machine, because we don't want to accidently do any harm  to our own host machine, we use virtualization.
 
 - [http://www.vagrantup.com/](http://www.vagrantup.com/ "Vagrant")<br>
   Vagrant can automatically create and recreate a virtual machine which results in the same environment for every user without doing manual steps.
 
 - git (optionally)<br>
-  git is not needed because you can download the sources and start the build process. But it is recommended for updating the build environment.
+  git is not needed because you can download the sources and start the build process. But it is recommended for updating the build environment while work is in progress.
 
 - [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html "putty") or any other ssh client<br>
-  if you want to pre-test the rootfs, you will need a ssh client.
+  if you want to pre-test the rootfs and check our executed scripts, you will need a ssh client.
 
 - about 20GB disk space 
 
@@ -31,9 +31,9 @@ After installing all necessary tools, you have to do the following steps to buil
    - Download/checkout the branch [cubiuntu](cubiuntu)
    - run `startVM.bat` or `vagrant up` in the download folder from `cmd.exe/shell`
 
-1. For further builds, start the VirtualBox image and 
+1. For further builds, start the VirtualBox image (`startVM.bat`) and 
    - rerun the vagrant provisioning by calling `vagrant provision`
-   - ssh login to the virtual machine (usr/pwd=`vagrant/vagrant`) and run the build script `/vagrant/manifests.sh`  
+   - ssh login to the virtual machine on `127.0.0.1:2222` (usr/pwd=`vagrant/vagrant`) and run the build script `/vagrant/manifests.sh`
 
 # Motivation
 
