@@ -9,8 +9,7 @@ You need the following tools build a cubieboard image.
   VirtualBox is a well-known virtual machine, because we don't want to accidently do any harm our own host machine
 
 - [http://www.vagrantup.com/](http://www.vagrantup.com/ "Vagrant")<br>
-  Vagrant can automatically set up virtual machines. Thus, it can easily create and recreate a virtual machine.<br>
-  Therfore, the installation process is automated and no manual ineractino should be necessary.   
+  Vagrant can automatically create and recreate a virtual machine which results in the same environment for every user without doing manual steps.
 
 - git (optionally)<br>
   git is not needed because you can download the sources and start the build process. But it is recommended for updating the build environment.
@@ -27,10 +26,12 @@ After installing all necessary tools, you have to do the following steps to buil
 1. Create the vagrant box which is used as a basic VirtualBox setup for cubieboard image creation. Typically, you only have to do this step once (or once in a while to update the vagrant box).
    - Download the branch [buildvm](buildvm)
    - start `createCubieVM.bat/sh`
+   <br><br>
 
 1. Start the VirtualBox image and let the provisioning build the cubieboard image.
    - Download/checkout the branch [cubiuntu](cubiuntu)
    - run `startVM.bat` or `vagrant up` in the download folder from `cmd.exe/shell`
+   <br><br>
 
 1. For further builds, start the VirtualBox image and 
    - rerun the vagrant provisioning by calling `vagrant provision`
@@ -38,11 +39,12 @@ After installing all necessary tools, you have to do the following steps to buil
 
 # Motivation
 
-I found myself testing image over image on my cubieboard2, searching THE image that fits all my needs.
-Everytime there was something that didn't work.
+I found myself testing image over image on my cubieboard2, searching for THE image that fits all my needs.
+Everytime there was something that didn't work or which I had to reconfigure. Then, a new image is released and i had to reconfigure the image again, and again...
+
 While reading a thread on cubieforums.com, the idea popped up to take a distro and make it customizable for everybody,
 but still have developers to improve its overall performance.
 
-Thus, my target is to provide a customizable framework for image creation so that users can select features 
+Thus, my target is to provide a customizable framework for image creation so that users can select features, but save their configurations when upgrading.
 
 I am using Ubuntu ever since, so my first choice was a Ubuntu based image, namely cubiuntu.
