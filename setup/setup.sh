@@ -7,6 +7,9 @@
 
 # read setup configuration and don't evaluate it yet, but copy to the rootfs as source file
 cat > $SRCDIR/setup/.bashrc.chroot << EOF
+#
+# this file has been automatically created.
+#
 export VAGRANT_PROVISION=1
 export BUILD_DEBUG=${BUILD_DEBUG}
 source $SRCDIR/build/build.api.sh

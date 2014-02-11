@@ -9,5 +9,5 @@ build_set ROOTFS_INTERACTIVE 0
 build_set ROOTFS_SCRIPTS "\
 	adduser.sh \
 	apt-update.sh \
-	locales.sh \
+	miniand_com.sh \
 	"

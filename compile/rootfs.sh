@@ -36,7 +36,13 @@ function copy_kernel_modules()
 	success sudo rm -rf ${rootfs}/lib/modules/
 	success sudo cp -r linux-sunxi/output/lib ${rootfs}
 	cat > /tmp/modules << EOF
-
+lcd
+hdmi
+disp
+mali
+fb
+ump
+mali_drm
 EOF
 	success "[ $? = 0 ] || { build_err \"failed to created /tmp/modules\" ; }"
 	success "echo \"${KERNEL_BOOT_MODULES}\" >> /tmp/modules"
