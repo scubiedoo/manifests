@@ -9,6 +9,7 @@ readonly SRCDIR="/vagrant"
 export SRCDIR
 
 cd $SRCDIR
-source build/build.sh
+# use complete path for stack trace
+source $SRCDIR/build/build.sh
 
 #apt-get install bc units kpartx 

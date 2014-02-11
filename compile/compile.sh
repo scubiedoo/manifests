@@ -83,8 +83,6 @@ success prepare_image BOOTFS_REF
 success prepare_image ROOTFS_REF
 #
 # we might use some advanced mechanism like getopt here
-echo ${DEFAULT_TARGETS}
-echo ${@-${DEFAULT_TARGETS}}
 for script in ${@-${DEFAULT_TARGETS}}; do
 	success [ -r ${SRCDIR}/compile/${script}.sh ]
 	success cd $BUILDDIR

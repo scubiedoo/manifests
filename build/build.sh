@@ -1,10 +1,10 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
-source build/build.api.sh
+source $SRCDIR/build/build.api.sh
 eval "`load_configuration $@`"
 
-source build/prepareEnvironment.sh
-source compile/compile.sh
+source $SRCDIR/build/prepareEnvironment.sh
+source $SRCDIR/compile/compile.sh
 
 #apt-get install bc units kpartx 

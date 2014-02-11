@@ -11,3 +11,6 @@
 /*.img
 
 /build/*.config.sh
+/compile/*.config.sh
+/setup/*.config.sh
+/setup/.bashrc.chroot

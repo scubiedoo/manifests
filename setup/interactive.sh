@@ -1,3 +1,3 @@
 #!/bin/bash
 
-bash -i
+/bin/bash -i

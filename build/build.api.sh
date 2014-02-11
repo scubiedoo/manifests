@@ -74,6 +74,7 @@ function execute()
 	build_info "executing $CMD"
 	eval $CMD
 }
+export -f execute
 
 function success()
 {
@@ -84,6 +85,7 @@ function success()
 		build_err "failed with code $RET"
 	fi
 }
+export -f success
 
 function build_export()
 {

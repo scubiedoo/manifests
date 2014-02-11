@@ -4,44 +4,6 @@
 build_ok invoked $0
 eval "`load_configuration`"
 
-function setupChroot()
-{
-	local rootfs last_dir
-	rootfs="${ROOTFS_REF[DIR]}"
-	last_dir=`pwd`
-	
-	success cd ${rootfs}
-	trap_push "cd ${last_dir}"
-		success sudo mv ${rootfs}/etc/resolv.conf ${rootfs}/etc/resolv.conf.orig
-		trap_push "sudo mv ${rootfs}/etc/resolv.conf.orig ${rootfs}/etc/resolv.conf"
-			success sudo cp /etc/resolv.conf ${rootfs}/etc/resolv.conf
-			
-			success sudo mount -o bind /proc ${rootfs}/proc
-			trap_push "sudo umount ${rootfs}/proc"
-				success sudo mount -o bind /dev ${rootfs}/dev
-				trap_push "sudo umount ${rootfs}/dev"
-					success sudo mount -o bind /dev/pts ${rootfs}/dev/pts
-					trap_push "sudo umount ${rootfs}/dev/pts"
-						success sudo mount -o bind /sys ${rootfs}/sys
-						trap_push "sudo umount ${rootfs}/sys"
-							success sudo mkdir -p ${rootfs}/vagrant
-							success sudo mount -o bind /vagrant ${rootfs}/vagrant
-							trap_push "sudo umount ${rootfs}/vagrant"
-								# now we can actually chroot :D
-								for script in $@; do
-									execute sudo chroot ${rootfs} [ -r /root/setup/${script} ] && {
-										success sudo chmod a+x ${rootfs}/root/setup/${script} ;
-										success sudo chroot ${rootfs} /root/setup/${script} ;
-									}
-								done
-						trap_pop
-					trap_pop
-				trap_pop
-			trap_pop
-		trap_pop
-	trap_pop
-}
-
 function build_rootfs()
 {
 	build_ok building rootfs $1
@@ -53,7 +15,6 @@ function build_rootfs()
 	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_REF} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
 	success sudo tar xkzf ${ROOTFS_FILE}
-	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
 	
 	build_ok built rootfs $1
 }
@@ -82,6 +43,68 @@ EOF
 	success sudo cp /tmp/modules ${rootfs}/etc/modules
 }
 
+#
+# this is kinda ugly... the functions are linked together, but it seems to be too much code to be in one function
+function prepare_chroot()
+{
+	success cd ${rootfs}
+	trap_push "cd ${last_dir}"
+
+	success sudo cp /etc/apt/apt.conf.d/01proxy ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot
+	trap_push "sudo rm ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot"
+
+	success sudo mv ${rootfs}/etc/resolv.conf ${rootfs}/etc/resolv.conf.chroot
+	trap_push "sudo mv ${rootfs}/etc/resolv.conf.chroot ${rootfs}/etc/resolv.conf"
+	success sudo cp /etc/resolv.conf ${rootfs}/etc/resolv.conf
+	
+	success sudo mount -o bind /proc ${rootfs}/proc
+	trap_push "sudo umount ${rootfs}/proc"
+
+	success sudo mount -o bind /dev ${rootfs}/dev
+	trap_push "sudo umount ${rootfs}/dev"
+
+	success sudo mount -o bind /dev/pts ${rootfs}/dev/pts
+	trap_push "sudo umount ${rootfs}/dev/pts"
+
+	success sudo mount -o bind /sys ${rootfs}/sys
+	trap_push "sudo umount ${rootfs}/sys"
+
+	success sudo mkdir -p ${rootfs}/vagrant
+	success sudo mount -o bind /vagrant ${rootfs}/vagrant
+	trap_push "sudo umount ${rootfs}/vagrant"
+	
+	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
+	trap_push "sudo rm -f ${rootfs}/usr/bin/qemu-arm-static"
+	
+}
+
+function cleanup_chroot()
+{
+	trap_pop
+	trap_pop
+	trap_pop
+	trap_pop
+	trap_pop
+	trap_pop
+	trap_pop
+}
+
+function setupChroot()
+{
+	local rootfs last_dir
+	rootfs="${ROOTFS_REF[DIR]}"
+	last_dir=`pwd`
+	
+	prepare_chroot
+	# now we can actually chroot :D
+	for script in $@; do
+		execute sudo [ -r ${rootfs}/root/setup/${script} ] && {
+			success sudo chroot ${rootfs} su - -c "\"${BASH} --login /root/setup/${script}\"" root ;
+		}
+	done
+	cleanup_chroot
+}
+
 function setup_rootfs()
 {
 	build_ok setting up rootfs $1
@@ -89,14 +112,18 @@ function setup_rootfs()
 	local rootfs interactive
 	rootfs="${ROOTFS_REF[DIR]}"
 	
-	success sudo mkdir -p ${rootfs}/root/setup
-	success sudo cp -a ${SRCDIR}/setup/* ${rootfs}/root/setup
+	# copy files to rootfs/setup folder
+	success sudo rm -rf ${rootfs}/root/setup
+	# prepare rootfs environment
+	source ${SRCDIR}/setup/setup.sh
+	success sudo cp -a ${SRCDIR}/setup ${rootfs}/root
 	
 	interactive=""
 	if [ ${ROOTFS_INTERACTIVE} = 1 ]; then
 		interactive="interactive.sh"
 	fi
 
+	# execute the scripts
 	success setupChroot ${ROOTFS_SCRIPTS} ${interactive}
 	
 	build_ok setting up rootfs $1
