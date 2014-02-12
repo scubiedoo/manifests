@@ -41,6 +41,9 @@ function build_err()
 	if [ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 0 ]; then 
 		build_out "${BUILD_CLR_RED}${@}${BUILD_CLR_RST}"
 		LSLOGSTACK 
+		# better print the current setting for debugging
+		[ ${BUILD_DEBUG-$DEFAULT_DEBUG} -gt 3 ] && set
+		
 	fi
 	exit 1
 }

@@ -42,5 +42,5 @@ function prepareDisk()
 # but i don't want to lose my compiled files and images
 # 
 prepareDisk $BUILDDISK `dirname $BUILDDIR`
-success mkdir -p $BUILDDIR
-chown vagrant $BUILDDIR
+success sudo mkdir -p $BUILDDIR
+success sudo chown vagrant $BUILDDIR
