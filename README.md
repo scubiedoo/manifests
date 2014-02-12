@@ -24,11 +24,11 @@ You need the following tools to build a cubieboard image.
 After installing all necessary tools, you have to do the following steps to build a basic cubieboard image
 
 1. Create the vagrant box which is used as a basic VirtualBox setup for cubieboard image creation. Typically, you only have to do this step once (or once in a while to update the vagrant box).
-   - Download the branch [buildvm](../buildvm)
+   - Download the branch [buildvm](../../tree/buildvm)
    - start `createCubieVM.bat/sh`
 
 1. Start the VirtualBox image and let the provisioning build the cubieboard image.
-   - Download/checkout the branch [cubiuntu](../cubiuntu)
+   - Download/checkout the branch [cubiuntu](../../tree/cubiuntu)
    - run `startVM.bat` or `vagrant up` in the download folder from `cmd.exe/shell`
 
 1. For further builds, start the VirtualBox image (`startVM.bat`) and 
