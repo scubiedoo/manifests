@@ -15,9 +15,9 @@ success()
 }
 
 success mkdir -p vm
-success [ -r vm/precise32.box ] || (cd vm; wget http://files.vagrantup.com/precise32.box; cd -)
+success [ -r vm/precise32.box ] || (cd vm; success wget http://files.vagrantup.com/precise32.box; cd -)
 
-success vagrant box add precise32 precise32.box
+success vagrant box add --force precise32 precise32.box
 
 success vagrant plugin install vagrant-proxyconf
 
