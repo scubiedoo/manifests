@@ -6,5 +6,3 @@ eval "`load_configuration $@`"
 
 source $SRCDIR/build/prepareEnvironment.sh
 source $SRCDIR/compile/compile.sh
-
-#apt-get install bc units kpartx 

@@ -11,7 +11,7 @@ function build_uboot()
 {
 	build_ok building uboot
 	cd u-boot-sunxi
-	success "CROSS_COMPILE=arm-linux-gnueabihf- $MAKE cubieboard2 2>&1 > uboot.log"
+	success "CROSS_COMPILE=arm-linux-gnueabihf- $MAKE cubieboard2 > uboot.log 2>&1"
 	build_ok built uboot
 }
 

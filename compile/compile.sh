@@ -67,6 +67,7 @@ function sync_git()
 	last_dir=`pwd`
 	success cd ${git_dir}
 	trap_push "cd ${last_dir}"
+		success git pull
 		success git checkout ${git_branch}
 	trap_pop
 

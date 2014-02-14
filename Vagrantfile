@@ -9,9 +9,9 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.provision :shell, :privileged => false, :inline => <<-SH
-  export http_proxy=ENV['HTTP_PROXY']
-  export https_proxy=ENV['HTTPS_PROXY']
-  export ftp_proxy=ENV['FTP_PROXY']
+  export http_proxy="#{ENV['HTTP_PROXY']}"
+  export https_proxy="#{ENV['HTTPS_PROXY']}"
+  export ftp_proxy="#{ENV['FTP_PROXY']}"
   /vagrant/manifests.sh
 SH
 end

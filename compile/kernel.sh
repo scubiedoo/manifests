@@ -11,9 +11,9 @@ function build_kernel()
 		build_ok menuconfig enabled
 		${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
 	fi
-	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage 2>&1 > kernel.log"
-	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules 2>&1 >> kernel.log"
-	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=output modules_install 2>&1 >> kernel.log"
+	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage > kernel.log 2>&1"
+	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules >> kernel.log 2>&1"
+	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=output modules_install >> kernel.log 2>&1"
 	build_ok built kernel
 }
 

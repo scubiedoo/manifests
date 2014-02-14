@@ -12,7 +12,7 @@ function build_rootfs()
 	rootfs="${ROOTFS_REF[DIR]}"
 	
 	# we nee the -E flag to pass through http_proxy
-	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_REF} ${ROOTFS_SOURCE};"
+	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_FILE} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
 	success sudo tar xkzf ${ROOTFS_FILE}
 	
