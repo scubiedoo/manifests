@@ -41,6 +41,7 @@ function prepareDisk()
 # i want to use an extra image file in order to have the possibility to run vagrant destroy and recreate my image.
 # but i don't want to lose my compiled files and images
 # 
-prepareDisk $BUILDDISK `dirname $BUILDDIR`
 success sudo mkdir -p $BUILDDIR
 success sudo chown vagrant $BUILDDIR
+success mkdir -p $BUILDDIR/vm
+prepareDisk $BUILDDISK `dirname $BUILDDIR`
