@@ -26,6 +26,7 @@ cmd /c vagrant box remove cubievm
 cmd /c vagrant up
 if ERRORLEVEL 1 GOTO :EOF
 
+del /Q /F %CUBIEBOX_FILE%
 cmd /c vagrant package --base cubievm --output %CUBIEBOX_FILE% --vagrantfile Vagrantfile.cubievm
 if ERRORLEVEL 1 GOTO :EOF
 
