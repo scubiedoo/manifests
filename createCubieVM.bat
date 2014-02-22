@@ -7,7 +7,7 @@ set BASEBOX_FILE=vm\precise32.box
 set CUBIEBOX_FILE=vm\cubievm.box
 
 mkdir vm
-if exist %BOX_FILE% (
+if exist %BASEBOX_FILE% (
 	cmd /c vagrant box add --force precise32 %BASEBOX_FILE%
 	if ERRORLEVEL 1 GOTO :EOF
 ) else (
