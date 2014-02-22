@@ -14,3 +14,4 @@
 /compile/*.config.sh
 /setup/*.config.sh
 /setup/.bashrc.chroot
+/.config

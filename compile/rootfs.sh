@@ -11,7 +11,6 @@ function build_rootfs()
 	local rootfs
 	rootfs="${ROOTFS_REF[DIR]}"
 	
-	# we nee the -E flag to pass through http_proxy
 	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_FILE} ${ROOTFS_SOURCE};"
 	cd ${rootfs}
 	success sudo tar xkzf ${ROOTFS_FILE}
@@ -56,9 +55,11 @@ function prepare_chroot()
 	success cd ${rootfs}
 	trap_push "cd ${last_dir}"
 
-	success sudo cp /etc/apt/apt.conf.d/01proxy ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot
-	trap_push "sudo rm ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot"
-
+	if [ -r /etc/apt/apt.conf.d/01proxy ]; then
+		success sudo cp /etc/apt/apt.conf.d/01proxy ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot
+		trap_push "sudo rm ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot"
+	fi
+	
 	success sudo mv ${rootfs}/etc/resolv.conf ${rootfs}/etc/resolv.conf.chroot
 	trap_push "sudo mv ${rootfs}/etc/resolv.conf.chroot ${rootfs}/etc/resolv.conf"
 	success sudo cp /etc/resolv.conf ${rootfs}/etc/resolv.conf
@@ -87,7 +88,9 @@ function prepare_chroot()
 function cleanup_chroot()
 {
 	trap_pop
-	trap_pop
+	if [ -r /etc/apt/apt.conf.d/01proxy ]; then
+		trap_pop
+	fi
 	trap_pop
 	trap_pop
 	trap_pop

@@ -5,4 +5,5 @@ source $SRCDIR/build/build.api.sh
 eval "`load_configuration $@`"
 
 source $SRCDIR/build/prepareEnvironment.sh
+source $SRCDIR/build/configuration.sh
 source $SRCDIR/compile/compile.sh

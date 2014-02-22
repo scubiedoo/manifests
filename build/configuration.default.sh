@@ -4,3 +4,4 @@
 # config parameter
 #
 build_export MENUCONFIG_SVN "http://menuconfig.googlecode.com/svn/trunk/"
+build_export CUBIECONFIG 0
