@@ -11,7 +11,6 @@ PACKAGELIST=" \
 	ncurses-dev \
 	units \
 	bc \
-	u-boot-tools \
 	"
 
 success()
