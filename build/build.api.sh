@@ -117,6 +117,7 @@ build_debug "`set`"
 	prefix=${name%.sh}
 	
 	name="$dir/$prefix.default.sh"
+	#[ -r $name ] || { echo "build_err config $name not found"; }
 	success chmod a+x $name
 	output="`$name $@`"
 	build_debug "${output}"

@@ -1,0 +1,6 @@
+
+#choice 'Video resolution' \
+#	"Auto           CONFIG_VIDEO_RES_AUTO   \
+#	 Direct         CONFIG_PCI_GODIRECT     \
+#	 Any            CONFIG_PCI_GOANY"       Any
+#	"

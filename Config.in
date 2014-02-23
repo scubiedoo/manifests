@@ -4,3 +4,7 @@
 #
 
 menu "Cubiuntu Menuconfig"
+
+source config/cubieboard.in
+
+endmenu

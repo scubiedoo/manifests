@@ -1,7 +1,8 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
-eval "`load_configuration $@`"
+build_ok running `basename ${BASH_ARGV[0]}`
+eval "`load_configuration`"
 
 function create_configfile()
 {
@@ -15,9 +16,11 @@ function configure()
 	execute [ -d menuconfig ] || { success svn checkout ${MENUCONFIG_SVN} menuconfig; }
 	trap_push "cd `pwd`"
 		success cd menuconfig
+		local dir=`pwd`
 		success svn update
 		success create_configfile
-		success make menuconfig
+		cd $SRCDIR
+		success make -C $dir menuconfig 
 		success cp .config $SRCDIR/.config
 	trap_pop
 }
