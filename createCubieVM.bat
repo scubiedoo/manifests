@@ -1,8 +1,5 @@
 rem I'm a bash shell user, so sorry for any bad batch code in advance
 
-rem set HTTP_PROXY=squid:80/
-rem set HTTPS_PROXY=squid:80/
-
 set BASEBOX_FILE=vm\precise32.box
 set CUBIEBOX_FILE=vm\cubievm.box
 
@@ -35,6 +32,7 @@ if ERRORLEVEL 1 GOTO :EOF
 
 echo "Successfully created cubievm box"
 pause
+exit 0
 
 :EOF
 
