@@ -1,0 +1,35 @@
+#
+# Kernel config
+menu "Kernel config"
+
+	config KERNEL_MENUCONFIG
+		bool "Menuconfig"
+		default n
+		help
+			Run menuconfig before compilation
+
+	comment "Kernel GIT repository"
+	
+	config KERNEL_GIT
+		string "repository"
+		default "https://github.com/patrickhwood/linux-sunxi"
+		help
+			GIT repository
+	
+	config KERNEL_GIT_BRANCH
+		string "branch"
+		default "pat-3.4.75"
+		help
+			GIT branch
+		
+	config KERNEL_DEFCONFIG
+		string "defconfig"
+		default "sun7i_defconfig"
+		help
+			Used when no .config file exists
+	
+	comment "TODO make it selectable"
+	
+endmenu
+
+#comment X

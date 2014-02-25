@@ -9,5 +9,6 @@ build_export KBUILD_DEFCONFIG "$SRCDIR/config/cb2_defconfig"
 build_export MENUCONFIG_FILES "\
 	$SRCDIR/config/environment.in \
 	$SRCDIR/config/cubieboard.in \
+	$SRCDIR/config/kernel.in \
 	$SRCDIR/config/example.in \
 	"

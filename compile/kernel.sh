@@ -1,13 +1,11 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
-eval "`load_configuration $@`"
-
 function build_kernel()
 {
 	build_ok building kernel
 	cd linux-sunxi
-	if [ ${KERNEL_MENUCONFIG} = 1 ]; then
+	if [ "${CONFIG_KERNEL_MENUCONFIG}" = "y" ]; then
 		build_ok menuconfig enabled
 		${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
 	fi
@@ -25,8 +23,8 @@ function deploy_kernel()
 }
 
 cd ${BUILDDIR}
-success sync_git "linux-sunxi" ${KERNEL_GIT} ${KERNEL_GIT_BRANCH}
-success "[ -r linux-sunxi/.config ] || { cd linux-sunxi; make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- sun7i_defconfig ; }"
+success sync_git "linux-sunxi" ${CONFIG_KERNEL_GIT} ${CONFIG_KERNEL_GIT_BRANCH}
+success "[ -r linux-sunxi/.config ] || { cd linux-sunxi; make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- ${CONFIG_KERNEL_DEFCONFIG} ; }"
 
 cd ${BUILDDIR}
 success build_kernel
