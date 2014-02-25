@@ -1,11 +1,13 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
-# remember: we run in a new shell and .config is not exported
+# remember: we run configuration files in a new shell and .config is not exported
 source $SRCDIR/.config
 
 build_set MAKE "make -j 4"
-build_set DEFAULT_TARGETS "uboot boot.scr kernel rootfs rootfs/x86-video-fbturbo assemble"
+build_set DEFAULT_TARGETS "uboot boot.scr kernel rootfs \
+	${CONFIG_XBMC_TARGET} \
+	assemble"
 
 echo "declare -A BOOTFS_REF"
 build_set BOOTFS_REF[FILE] "${CONFIG_BOOTFS_REF_FILE}"

@@ -81,9 +81,6 @@ function sync_git()
 success mkdir -p $BUILDDIR
 
 cd $BUILDDIR
-#source $SRCDIR/compile/configuration.sh
-
-cd $BUILDDIR
 success prepare_image BOOTFS_REF
 success prepare_image ROOTFS_REF
 #

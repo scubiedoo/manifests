@@ -1,0 +1,27 @@
+#
+# Uboot config
+menu "Uboot config"
+
+	comment "Uboot GIT repository"
+	
+	config UBOOT_GIT
+		string "repository"
+		default "https://github.com/linux-sunxi/u-boot-sunxi"
+		help
+			GIT repository
+	
+	config UBOOT_GIT_BRANCH
+		string "branch"
+		default "sunxi"
+		help
+			GIT branch
+
+	config UBOOT_DEFCONFIG
+		string "defconfig"
+		default "cubieboard2"
+		help
+			defconfig for uboot
+		
+endmenu
+
+#comment X
