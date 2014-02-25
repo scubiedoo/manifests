@@ -2,6 +2,7 @@
 set +i
 PACKAGELIST=" \
 	git \
+	subversion \
 	vim \
 	build-essential \
 	gcc-arm-linux-gnueabihf \

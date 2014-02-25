@@ -18,7 +18,7 @@ if exist %BASEBOX_FILE% (
 cmd /c vagrant plugin install vagrant-proxyconf
 if ERRORLEVEL 1 GOTO :EOF
 
-cmd /c vagrant destroy
+cmd /c vagrant destroy --force
 cmd /c vagrant box remove cubievm
 cmd /c vagrant up
 if ERRORLEVEL 1 GOTO :EOF
