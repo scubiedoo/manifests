@@ -4,4 +4,6 @@
 # config parameter
 #
 build_export BUILD_DEBUG 3
-build_export BUILDDIR "/mnt/builddisk/vagrant"
+
+# actually only used for menuconfig...
+build_export BUILDDIR "/tmp"

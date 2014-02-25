@@ -39,11 +39,8 @@ config Depend_2_example
 	bool "Depend 2 example"
 	default n
 	help
-	  Even small dogs may be forbidden on public transport and in shopping malls and
-	  supermarkets.
-
-	  Note Other provisions will address where dogs can be walked and who's responsible 
-	  for any messes they leave behind.
+	  Even small dogs may be forbidden on public transport and in shopping malls and supermarkets.
+	  Note Other provisions will address where dogs can be walked and who's responsible for any messes they leave behind.
 	  
 choice
 	prompt "Multi Selection"

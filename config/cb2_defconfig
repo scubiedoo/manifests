@@ -1,0 +1,30 @@
+#
+# Automatically generated make config: don't edit
+# version: 
+# Tue Feb 25 12:45:20 2014
+#
+
+#
+# Environment
+#
+# CONFIG_NATIVE_LINUX_HOST is not set
+CONFIG_CREATE_BUILDDISK=y
+CONFIG_BUILDDISK="${SRCDIR}/vm/builddisk.img"
+CONFIG_BUILDDISK_SIZE="10G"
+
+#
+# Example Menuconfig
+#
+CONFIG_String_Example="abcdefg"
+CONFIG_INT_Example=2
+# CONFIG_Bool_1_Example is not set
+# CONFIG_Bool_2_Example is not set
+CONFIG_Depend_1_example=y
+CONFIG_Depend_2_example=y
+CONFIG_OPTION_1=y
+# CONFIG_OPTION_2 is not set
+# CONFIG_OPTION_3 is not set
+
+#
+# Applets
+#

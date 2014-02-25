@@ -24,7 +24,8 @@ function create_image()
 	
 	# check existance of image file or create it
 	#
-	execute [ -r ${image} ] || { 
+	execute [ -r ${image} ] || {
+		success mkdir -p `dirname ${image}`
 		success dd if=/dev/zero of=${image} bs=1 seek=${size} count=1; 
 	}
 	

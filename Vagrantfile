@@ -1,6 +1,15 @@
 Vagrant.configure("2") do |config|
+  config.proxy.http = ENV['HTTP_PROXY']
+  config.proxy.https = ENV['HTTPS_PROXY']
   config.apt_proxy.http = ENV['HTTP_PROXY']
   config.apt_proxy.https = ENV['HTTPS_PROXY']
+  
+# we have to wait for the new plugin version... :/
+#  config.git_proxy.http = ENV['HTTP_PROXY']
+#  config.git_proxy.https = ENV['HTTPS_PROXY']
+#  config.svn_proxy.http = ENV['HTTP_PROXY']
+#  config.svn_proxy.https = ENV['HTTPS_PROXY']
+  
   config.vm.box = "cubievm"
 
   config.vm.provider :virtualbox do |vb|
@@ -8,10 +17,5 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--cpus", "4"]   
   end
   
-  config.vm.provision :shell, :privileged => false, :inline => <<-SH
-  export http_proxy="#{ENV['HTTP_PROXY']}"
-  export https_proxy="#{ENV['HTTPS_PROXY']}"
-  export ftp_proxy="#{ENV['FTP_PROXY']}"
-  /vagrant/manifests.sh
-SH
+  config.vm.provision :shell, :privileged => false, path: "manifests.sh"
 end

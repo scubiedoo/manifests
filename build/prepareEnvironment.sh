@@ -7,10 +7,10 @@ eval "`load_configuration`"
 #
 function createDisk()
 {
-	local disk
+	local disk size
 	disk=$1
-	# remember: blocksize=1K * seek=10M => 10GB disksize
-	success sudo dd if=/dev/zero of=$disk  bs=1K seek=10M count=1
+	size=$2
+	success sudo dd if=/dev/zero of=$disk  bs=1 seek=$size count=1
 	# we create ext2 because ignore journalling and stuff
 	success sudo mkfs.ext2 -F $disk
 }
@@ -20,16 +20,17 @@ function prepareDisk()
 {
 	local disk diskname mountppoint device RET
 	disk="$1"
-	mountpoint="$2"
+	size="$2"
+	mountpoint="$3"
 	
-	success "[ -r $disk ] || createDisk $disk"
+	success "[ -r $disk ] || createDisk $disk $size"
 	
 	#disk already mounted...?! caused by "vagrant provision"
 	device="`mount |grep \"$mountpoint\"`"
 	RET=$?
 	if [ $RET != 0 ]; then
 		success sudo mkdir -p $mountpoint
-			
+		
 		device=`sudo losetup -f`
 		RET=$?
 		success "[ -n $device ] || echo 'no more loop devices'"
@@ -40,8 +41,10 @@ function prepareDisk()
 
 # i want to use an extra image file in order to have the possibility to run vagrant destroy and recreate my image.
 # but i don't want to lose my compiled files and images
-# 
+#
+success mkdir -p $SRCDIR/vm
 success sudo mkdir -p $BUILDDIR
-success sudo chown vagrant $BUILDDIR
-success mkdir -p $BUILDDIR/vm
-prepareDisk $BUILDDISK `dirname $BUILDDIR`
+success sudo chown $USER $BUILDDIR
+if [ "${CONFIG_CREATE_BUILDDISK}" = "y" ]; then
+	prepareDisk "$CONFIG_BUILDDISK" "$CONFIG_BUILDDISK_SIZE" `dirname $BUILDDIR`
+fi

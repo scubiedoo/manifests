@@ -1,0 +1,133 @@
+#
+# For a description of the syntax of this configuration file,
+# see scripts/config-language.txt.
+#
+
+menu "Environment"
+
+	config NATIVE_LINUX_HOST
+		bool "Native linux host"
+		default n
+		help
+			Are you running the script from a linux host?
+			There are some optimizations and restrictions that might apply.
+
+	config BUILDDIR
+		string "Builddir"
+		default "/mnt/builddisk/$USER"
+		help
+			Directory where all sources are downloaded
+			If you specify CREATE_BUILDDISK, 
+			the image file will be mounted at this place
+		
+	menuconfig CREATE_BUILDDISK
+		bool "Extra builddisk"
+		default y
+		depends on NATIVE_LINUX_HOST=n
+		help
+			Use extra image file for source download and compilation.
+			When using Vagrant, "vagrant destroy" deletes your complete disk.
+			If you want to keep your results, 
+			but still want to use vagrant destroy,
+			say Y here.
+
+		if CREATE_BUILDDISK
+
+			config BUILDDISK
+				string "Build disk file name"
+				default "${SRCDIR}/vm/builddisk.img"
+				help
+					Location of the general builddisk image file
+			
+			config BUILDDISK_SIZE 
+				string "Build disk file size"
+				default 10G
+				help
+					Use a size that dd can understand
+			
+		endif # CREATE_BUILDDISK
+
+	menuconfig CREATE_ARM_BUILDCHROOT
+		bool "Extra ARM build chroot"
+		default n
+		help
+			If you need to compile stuff (like XBMC) natively
+			in a ARM environment, but don't want to blow your
+			ROOTFS_REF image file, say Y here
+		
+		if CREATE_ARM_BUILDCHROOT
+
+			config ARM_BUILD_CHROOT
+				string "Chroot directory"
+				default "${BUILDDIR}/chroot"
+				help
+					Location of the chroot
+		
+		endif # CREATE_ARM_BUILDCHROOT
+	
+	menu "RootFS Reference"
+		config ROOTFS_REF_FILE
+			string "Rootfs partition image file"
+			default "$SRCDIR/vm/rootfs_reference.img"
+		
+		config ROOTFS_REF_SIZE
+			string 
+			default "4G"
+			help
+				Use a value that dd can understand.
+				Specify a size that should be comparable 
+				to your SD card
+			
+		config ROOTFS_REF_DIR
+			string "Mountpoint"
+			default "/mnt/rootfs_ref"
+			help
+				Where should the image file be mounted
+				
+		config ROOTFS_REF_FS
+			string "Filesystem"
+			default "ext4"
+			help
+				which filesystem should be used
+			
+		config ROOTFS_REF_FS_OPTS
+			string 
+			default "-F"
+			help
+				mkfs.X options
+	endmenu
+
+	menu "BootFS Reference"
+		config BOOTFS_REF_FILE
+			string "Image file"
+			default "$SRCDIR/vm/bootfs_reference.img"
+		
+		config BOOTFS_REF_SIZE
+			string 
+			default "15M"
+			help
+				Ask patwood if you might change this value...
+				I'm totally unsure about another size
+		
+		config BOOTFS_REF_DIR
+			string "Mountpoint"
+			default "/mnt/bootfs_ref"
+			help
+				Where should the image file be mounted
+				
+		config BOOTFS_REF_FS
+			string "Filesystem"
+			default "vfat"
+			help
+				which filesystem should be used
+			
+		config BOOTFS_REF_FS_OPTS
+			string 
+			default ""
+			help
+				mkfs.X options
+	endmenu
+
+endmenu
+
+#comment "Applets"

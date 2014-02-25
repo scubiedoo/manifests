@@ -94,7 +94,10 @@ function build_export()
 {
 	local var=$1
 	local val="$2"
-	build_ok "exporting user-defined variable $var=$val"
+#	local c=`echo '[ -n "${'$1'+set}" ] && val="${'$1'}"'`
+#	eval "$c"
+	
+	build_ok "exporting ${USERDEF} variable $var=$val"
 	echo "export $var=\"$val\""
 }
 export -f build_export
@@ -103,7 +106,9 @@ function build_set()
 {
 	local var=$1
 	local val="$2"
-	build_ok "setting user-defined variable $var=$val"
+#	local c=`echo '[ -n "${'$1'+set}" ] && val="${'$1'}"'`
+#	eval "$c"
+	build_ok "setting ${USERDEF} variable $var=$val"
 	echo "$var=\"$val\""
 }
 export -f build_set
@@ -116,6 +121,7 @@ build_debug "`set`"
 	dir=`dirname ${BASH_SOURCE[1]}`
 	prefix=${name%.sh}
 	
+	export USERDEF="default"
 	name="$dir/$prefix.default.sh"
 	#[ -r $name ] || { echo "build_err config $name not found"; }
 	success chmod a+x $name
@@ -123,11 +129,13 @@ build_debug "`set`"
 	build_debug "${output}"
 	echo "${output}"
 	
+	export USERDEF="user-defined"
 	name="$dir/$prefix.config.sh"
 	execute [ -r $name ] && {
 		success chmod a+x $name
 		echo "`$name $@`"
 	}
+	unset USERDEF
 }
 export -f load_configuration
 
