@@ -18,8 +18,6 @@ All preceeding builds need to be triggered manually:
 User configuration is work in progress.
 For details refer to the developer's configuration section below.
 
-
-
 # How it works - developer part #
 
 The build process is designed to run reproducible and automatically from scratch.
@@ -45,6 +43,10 @@ The repository provides the following directories
 - `build`<br>
    contains the build API and a setup file to perpare and mount the builddisk.
 
+- `config`<br>
+   contains all config.in files for menuconfig configuration. 
+   Furthermore, all default configurations (defconfig) are located in this directory.
+
 - `compile`<br>
    main folder that provides all scripts to create the image.<br>
    These scripts are organized by the main script `compile/compile.sh` which also supports modulary calling a sub-script.<br>
@@ -52,10 +54,6 @@ The repository provides the following directories
 
 - `setup`<br>
    contains all scripts that modify the rootfs of the cubiuntu image. Each script is executed as `root` inside a chroot-environment which emulates the system like would run on the real cubieboard.
-
-- `config`<br>
-   contains all config.in files for menuconfig configuration. 
-   Furthermore, all default configurations are located in this directory.
 
 ## API ##
 
