@@ -3,7 +3,24 @@
 
 Please install all necessary tools, refer to [master/README.md](../master/README.md) for a list.
 
-## Step by step
+## Configuration ##
+*User configuration is work in progress.
+For details refer to the developer's configuration section below.*
+
+If you want to use another default image configuration than the initial configuration, follow the steps below.
+
+Select a defconfig for your image creation, e.g. `a_special_defconfig`<br>currently only one exists, 
+**so skip this step** ;)
+
+Create the following file in the source folder: `build/configuration.config.sh`
+<pre>
+#!/bin/bash
+build_export KBUILD_DEFCONFIG "$SRCDIR/config/a_special_defconfig"
+</pre>
+
+That's it! Go on and create your image!
+
+## Step by step ##
 Under Windows: start the Virtual Machine by executing `startVM.bat`.<br>
 When you do it the first time, it will take quite a long time, because the Vagrant provisioning will instantly create the image file `generated.img`.
 
@@ -13,10 +30,6 @@ All preceeding builds need to be triggered manually:
 - Open a shell: e.g. `putty.exe` on `vagrant@127.0.0.1`<br>
   password is `vagrant` 
 - Create the image file `/vagrant/manifests.sh`
-
-## Configuration ##
-User configuration is work in progress.
-For details refer to the developer's configuration section below.
 
 # How it works - developer part #
 
