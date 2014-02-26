@@ -1,0 +1,32 @@
+#
+# RootFS config
+menu "RootFS config"
+
+	config ROOTFS_INTERACTIVE
+		bool "interactive rootfs"
+		default n
+		help
+			If you want to access the rootfs within a chroot
+			say Y here.
+	
+	comment "RootFS source"
+	config ROOTFS_SOURCE
+		string "url"
+		default "http://cdimage.ubuntu.com/ubuntu-core/releases/raring/release/ubuntu-core-13.04-core-armhf.tar.gz"
+		help
+			The url is used to download the rootfs in case 
+			the file doesn't exist already
+	
+	config ROOTFS_FILE
+		string "file"
+		default "$SRCDIR/vm/ubuntu-core-13.04-core-armhf.tar.gz"
+		help
+			Location of the rootfs file.
+			Currently, tar.gz is expected.
+			Feel free to add more archive types
+		
+	comment "TODO Make it selectable here"
+
+endmenu
+
+#comment 

@@ -21,7 +21,63 @@ menu "Uboot config"
 		default "cubieboard2"
 		help
 			defconfig for uboot
+
+	menuconfig BUILD_BOOT_SCR
+		bool "Build boot.scr"
+		default n
 		
+		if BUILD_BOOT_SCR
+			config BOOT_CMD_EXTRA
+				string "boot.cmd extra"
+				default "setenv machid"
+				help
+					added to boot.cmd for creating boot.scr
+					
+					a minor hack to add several lines to boot.cmd:
+					the string is `echoed` before passing to the file.
+					you can use something like this to add several lines
+					setenv machid
+			
+			comment "Boot.scr tools"
+			config SCRIPT_TOOLS_GIT
+				string "repository"
+				default "https://github.com/linux-sunxi/sunxi-tools"
+				help
+					Boot.scr GIT repository
+					
+			config SCRIPT_TOOLS_GIT_BRANCH
+				string "branch"
+				default "master"
+				help
+					Boot.scr GIT branch
+
+			comment "Boot.scr board definitions"
+			config SCRIPT_BOARDS_GIT
+				string "repository"
+				default "https://github.com/linux-sunxi/sunxi-boards"
+				help
+					sunxi boards GIT repository
+				
+			config SCRIPT_BOARDS_GIT_BRANCH
+				string "branch"
+				default "master"
+				help
+					sunxi boards GIT branch
+
+			config SCRIPT_FEX_FILE
+				string "fex file"
+				default "sunxi-boards/sys_config/a20/cubieboard2.fex"
+				help
+					Specify the fex file for your board
+			comment "Misc"
+			config BOOTSCR_TARGET
+				string "compile target"
+				default "boot.scr"
+				help
+					Define which script will be executed to build boot.scr
+					Only change it, if you know what you are doing.
+		endif
+
 endmenu
 
-#comment X
+#comment 

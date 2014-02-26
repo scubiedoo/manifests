@@ -1,7 +1,7 @@
 #!/bin/bash
 [ "x$VAGRANT_PROVISION" = "x1" ] || { echo "please run this script from manifests.sh" 1>&2; exit 1; }
 
-build_ok invoked $0
+build_info running `basename ${BASH_ARGV[0]}`
 eval "`load_configuration`"
 
 function build_rootfs()
@@ -11,9 +11,9 @@ function build_rootfs()
 	local rootfs
 	rootfs="${ROOTFS_REF[DIR]}"
 	
-	success "[ -r ${ROOTFS_FILE} ] || wget -O ${ROOTFS_FILE} ${ROOTFS_SOURCE};"
+	success "[ -r ${CONFIG_ROOTFS_FILE} ] || wget -O ${CONFIG_ROOTFS_FILE} ${CONFIG_ROOTFS_SOURCE};"
 	cd ${rootfs}
-	success sudo tar xkzf ${ROOTFS_FILE}
+	success sudo tar xkzf ${CONFIG_ROOTFS_FILE}
 	
 	build_ok built rootfs $1
 }
@@ -34,17 +34,11 @@ function copy_kernel_modules()
 	success sudo mkdir -p ${rootfs}/lib/modules
 	success sudo rm -rf ${rootfs}/lib/modules/
 	success sudo cp -r linux-sunxi/output/lib ${rootfs}
-	cat > /tmp/modules << EOF
-lcd
-hdmi
-disp
-mali
-fb
-ump
-mali_drm
-EOF
-	success "[ $? = 0 ] || { build_err \"failed to created /tmp/modules\" ; }"
-	success "echo \"${KERNEL_BOOT_MODULES}\" >> /tmp/modules"
+	success sudo rm -f /tmp/modules
+	for m in ${CONFIG_KERNEL_BOOT_MODULES}; do
+		echo -e "$m" >> /tmp/modules
+		success "[ $? = 0 ] || { build_err \"failed to created /tmp/modules\" ; }"
+	done
 	success sudo cp /tmp/modules ${rootfs}/etc/modules
 }
 
@@ -128,7 +122,7 @@ function setup_rootfs()
 	success sudo cp -a ${SRCDIR}/setup ${rootfs}/root
 	
 	interactive=""
-	if [ ${ROOTFS_INTERACTIVE} = 1 ]; then
+	if [ ${CONFIG_ROOTFS_INTERACTIVE} = 1 ]; then
 		interactive="interactive.sh"
 	fi
 

@@ -7,7 +7,15 @@ menu "Kernel config"
 		default n
 		help
 			Run menuconfig before compilation
-
+	
+	config KERNEL_BOOT_MODULES
+		string "boot modules"
+		default "lcd hdmi disp mali fb ump mali_drm"
+		help
+			these modules are loaded in this order.
+			If you don't know what this is about, leave it as it is.
+			Otherwise your cubieboard might produce dead locks.
+	
 	comment "Kernel GIT repository"
 	
 	config KERNEL_GIT

@@ -1,0 +1,32 @@
+#
+# Assemble image config
+menu "Assemble image file"
+
+	config IMAGE
+		string "image file"
+		default "$SRCDIR/generated.img"
+		help
+			Final image file name
+	
+	config ROOTFS_EXTRA_SPACE
+		int "extra space(mb)"
+		default 100
+		help
+			when creating the rootfs for the sd card,
+			the rootfs will have the exact size of the needed
+			space. to have at least some free bytes when booting
+			on the real system, add some extra bytes here.
+	
+	config TMPIMAGE
+		string "temp image"
+		default "/tmp/generated.img"
+		depends on !NATIVE_LINUX_HOST
+		help
+			i need to create the image in a tmp-directory 
+			because one of mkfs/kpartx/losetup couldn't handle 
+			the file to be on a vboxsf file system 
+			for writing data to it :/
+	
+endmenu
+
+#comment 

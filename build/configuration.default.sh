@@ -11,5 +11,6 @@ build_export MENUCONFIG_FILES "\
 	$SRCDIR/config/cubieboard.in \
 	$SRCDIR/config/uboot.in \
 	$SRCDIR/config/kernel.in \
-	$SRCDIR/config/example.in \
+	$SRCDIR/config/rootfs.in \
+	$SRCDIR/config/assemble.in \
 	"

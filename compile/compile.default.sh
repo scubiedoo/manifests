@@ -5,7 +5,10 @@
 source $SRCDIR/.config
 
 build_set MAKE "make -j 4"
-build_set DEFAULT_TARGETS "uboot boot.scr kernel rootfs \
+build_set DEFAULT_TARGETS "uboot \
+	${CONFIG_BOOTSCR_TARGET} \
+	kernel rootfs \
+	
 	${CONFIG_XBMC_TARGET} \
 	assemble"
 
