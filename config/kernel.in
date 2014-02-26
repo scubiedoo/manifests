@@ -34,7 +34,7 @@ menu "Kernel config"
 		string "defconfig"
 		default "sun7i_defconfig"
 		help
-			Used when no .config file exists
+			Used as default when no .config file exists
 	
 	comment "TODO make it selectable"
 	

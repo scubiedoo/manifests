@@ -71,7 +71,7 @@ function prepare_chroot()
 	trap_push "sudo umount ${rootfs}/sys"
 
 	success sudo mkdir -p ${rootfs}/vagrant
-	success sudo mount -o bind /vagrant ${rootfs}/vagrant
+	success sudo mount -o bind $SRCDIR ${rootfs}/vagrant
 	trap_push "sudo umount ${rootfs}/vagrant"
 	
 	success sudo cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/
@@ -122,7 +122,7 @@ function setup_rootfs()
 	success sudo cp -a ${SRCDIR}/setup ${rootfs}/root
 	
 	interactive=""
-	if [ ${CONFIG_ROOTFS_INTERACTIVE} = 1 ]; then
+	if [ "${CONFIG_ROOTFS_INTERACTIVE}" = "y" ]; then
 		interactive="interactive.sh"
 	fi
 

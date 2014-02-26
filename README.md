@@ -53,6 +53,10 @@ The repository provides the following directories
 - `setup`<br>
    contains all scripts that modify the rootfs of the cubiuntu image. Each script is executed as `root` inside a chroot-environment which emulates the system like would run on the real cubieboard.
 
+- `config`<br>
+   contains all config.in files for menuconfig configuration. 
+   Furthermore, all default configurations are located in this directory.
+
 ## API ##
 
 Due to on going changes to the API, please refer to `build/build.api.sh` for documentation.
@@ -75,19 +79,59 @@ Most important functions:
 - `build_set` or `build_export`<br>
    can be used to set or export variables: use `build_set VAR value` to set or export a value in a configuration.
 
+
 ## Configuration ##
+The Cubiuntu workflow provides two ways for configuration: Config files and menuconfig.
+Config files describes the basic and (bash-)builtin mechanism which can be used to activate interactive menuconfig.
+
+### Config files ###
 User-defined configuration works by overwriting the default values.
 In order to keep the merge process easy and prevent user configurations conflicts, all user configurations are kept in an own file.
 
-Except for the setup scripts which run in the chroot environment, every `default.sh` can be customized.
+Except for the setup scripts which runs in the chroot environment, every `default.sh` can be customized.
 Therefore, create a new file called `scriptname.config.sh` where default settings can be overwritten.
 
 **Attention:** the configuration script produces a **shell script** which can then be evaluated.<br>
-In order to overwrite a variable, print "VARNAME=value" as output. This mechanism makes it possible to run other scripts as well, e.g. 
+In order to overwrite a variable, print "VARNAME=value" as output.
+Build API provides two basic functions for exporting and setting variables.
+<pre>
+#!/bin/bash
+build_set FOO value
+build_export BAR value
+</pre>
+
+This mechanism makes it possible to run other scripts as well, e.g. 
 <pre>
 #!/bin/bash
 perl my-configure.pl 
 </pre>
+
+
+### Menuconfig ###
+
+Menuconfig allows interactive configuration which is very convinient for users.
+However, to activate menuconfig, create the following file: `build/configuration.config.sh`
+<pre>
+#!/bin/bash
+build_export CUBIECONFIG 1
+</pre>
+
+This will start menuconfig during each process, given the user the ability to change config values.
+
+The structure of the menu is still work in progress. Currently, it's structure complies to the workflow:
+
+ - `environment`<br>
+   options that apply to the directory setup and other basic values. 
+ - `cubieboard`<br>
+   currently empty, but should contain general board specific options, e.g. LED settings, video resolution, video output, audio output
+ - `uboot`<br>
+   options that apply to uboot and boot.scr. 
+ - `kernel`<br>
+   options that apply to kernel setup
+ - `rootfs`<br>
+   work in progress... 
+ - `assembling`<br>
+   options that apply to final image creation
 
 ## Setup overview ##
 
@@ -109,17 +153,25 @@ I did it on a Windows host, so the structure looks like this:
 |                                   |/vagrant/vm/bootfs_ref.img   &lt; mount > /mnt/bootfs_ref
 |                                   |/vagrant/vm/rootfs_ref.img   &lt; mount > /mnt/rootfs_ref
 |                                   |
+|                                   |/mnt/builddisk/chroot 
+|                                   |              | optional chroot for building 
+|                                   |              +-->+-------------------------------------
+|                                   |                  | armhf chroot
+|                                   |                  |
+|                                   |                  | build environment for compiling
+|                                   |                  +-------------------------------------
+|                                   |
 |                                   |/mnt/rootfs_ref contains the cubieboard rootfs 
 |                                   |              | which can be accessed using chroot
-|                                   |              +-->+----------------------
+|                                   |              +-->+-------------------------------------
 |                                   |                  | armhf chroot
-|                                   |                  | 
 |                                   |                  | 
 |                                   |                  | during the rootfs creation process 
 |                                   |                  | the files from setup are copied and
 |                                   |                  | executed inside the chroot
 |d:\manifests\setup   ---- copy ---->/mnt/rootfs_ref -->/root/setup
 |                                   |                  | 
+|                                   |                  +-------------------------------------
 |                                   |
 |                                   |finally, the image will be assembled into the following file
 |d:\manifests\generated.img &lt;------- /vagrant/generated.img
