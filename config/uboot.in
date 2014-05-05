@@ -18,7 +18,7 @@ menu "Uboot config"
 
 	config UBOOT_DEFCONFIG
 		string "defconfig"
-		default "cubieboard2"
+		default "Cubieboard2"
 		help
 			defconfig for uboot
 

@@ -10,7 +10,8 @@ function build_uboot()
 {
 	build_ok building uboot
 	cd u-boot-sunxi
-	success "CROSS_COMPILE=arm-linux-gnueabihf- $MAKE ${CONFIG_UBOOT_DEFCONFIG} > uboot.log 2>&1"
+	success "CROSS_COMPILE=arm-linux-gnueabihf- $MAKE ${CONFIG_UBOOT_DEFCONFIG}_config > uboot.log 2>&1"
+	success "CROSS_COMPILE=arm-linux-gnueabihf- $MAKE >> uboot.log 2>&1"
 	build_ok built uboot
 }
 

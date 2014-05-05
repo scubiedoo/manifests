@@ -9,10 +9,11 @@ function build_rootfs()
 	build_ok building rootfs $1
 
 	local rootfs
-	rootfs="${ROOTFS_REF[DIR]}"
+	rootfs=$1
+	success mkdir -p  ${rootfs}
 	
 	success "[ -r ${CONFIG_ROOTFS_FILE} ] || wget -O ${CONFIG_ROOTFS_FILE} ${CONFIG_ROOTFS_SOURCE};"
-	cd ${rootfs}
+	success cd ${rootfs}
 	success sudo tar xkzf ${CONFIG_ROOTFS_FILE}
 	
 	build_ok built rootfs $1
@@ -37,7 +38,7 @@ function copy_kernel_modules()
 	success sudo rm -f /tmp/modules
 	for m in ${CONFIG_KERNEL_BOOT_MODULES}; do
 		echo -e "$m" >> /tmp/modules
-		success "[ $? = 0 ] || { build_err \"failed to created /tmp/modules\" ; }"
+		success "[ $? = 0 ] || { build_err \"failed to edit /tmp/modules\" ; }"
 	done
 	success sudo cp /tmp/modules ${rootfs}/etc/modules
 }
@@ -46,8 +47,10 @@ function copy_kernel_modules()
 # this is kinda ugly... the functions are linked together, but it seems to be too much code to be in one function
 function prepare_chroot()
 {
+	local rootfs
+	rootfs="$1"
+	trap_push "cd `pwd`"
 	success cd ${rootfs}
-	trap_push "cd ${last_dir}"
 
 	if [ -r /etc/apt/apt.conf.d/01proxy ]; then
 		success sudo cp /etc/apt/apt.conf.d/01proxy ${rootfs}/etc/apt/apt.conf.d/01proxy-chroot
@@ -94,14 +97,15 @@ function cleanup_chroot()
 
 function setupChroot()
 {
-	local rootfs last_dir
+	local rootfs
 	rootfs="${ROOTFS_REF[DIR]}"
-	last_dir=`pwd`
 	
-	prepare_chroot
+	prepare_chroot ${rootfs}
 	# now we can actually chroot :D
 	for script in $@; do
 		execute sudo [ -r ${rootfs}/root/setup/${script} ] && {
+			# i had some problems to load $SRCDIR/setup/.bashrc.chroot in bashrc
+			# this is the solution i came up with... fix it if you can :)
 			success sudo chroot ${rootfs} su - -c "\"${BASH} --login /root/setup/${script}\"" root ;
 		}
 	done
@@ -113,7 +117,7 @@ function setup_rootfs()
 	build_ok setting up rootfs $1
 	
 	local rootfs interactive
-	rootfs="${ROOTFS_REF[DIR]}"
+	rootfs=$1
 	
 	# copy files to rootfs/setup folder
 	success sudo rm -rf ${rootfs}/root/setup
@@ -133,10 +137,16 @@ function setup_rootfs()
 }
 
 cd ${BUILDDIR}
-success build_rootfs
+success build_rootfs "${ROOTFS_REF[DIR]}"
+
+if [ "${CONFIG_CREATE_ARM_BUILDCHROOT}" = "y" ]; then
+	build_ok "building arm chroot"
+	cd ${BUILDDIR}
+	success build_rootfs "${CONFIG_ARM_BUILD_CHROOT}"
+fi
 
 cd ${BUILDDIR}
 success copy_kernel_modules
 
 cd ${BUILDDIR}
-success setup_rootfs
+success setup_rootfs "${ROOTFS_REF[DIR]}"

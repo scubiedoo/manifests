@@ -59,9 +59,11 @@ menu "Environment"
 
 			config ARM_BUILD_CHROOT
 				string "Chroot directory"
-				default "${BUILDDIR}/chroot"
+				default "${CONFIG_BUILDDIR}/chroot"
 				help
 					Location of the chroot
+			
+			comment "TODO configure an own rootfs file"
 		
 		endif # CREATE_ARM_BUILDCHROOT
 	

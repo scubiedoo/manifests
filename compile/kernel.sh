@@ -10,6 +10,9 @@ function build_kernel()
 	if [ "${CONFIG_KERNEL_MENUCONFIG}" = "y" ]; then
 		build_ok menuconfig enabled
 		${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
+		# TODO remove this line if no longer necessary
+		# it's a hack because of the broken kernel config
+		success sed -i -e's/^CONFIG_HWMON=m$/CONFIG_HWMON=y/' .config
 	fi
 	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage > kernel.log 2>&1"
 	success "${MAKE} ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules >> kernel.log 2>&1"
