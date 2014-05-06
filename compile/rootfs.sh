@@ -85,23 +85,25 @@ function prepare_chroot()
 function cleanup_chroot()
 {
 	trap_pop
+	trap_pop
+	trap_pop
+	trap_pop
+	trap_pop
 	if [ -r /etc/apt/apt.conf.d/01proxy ]; then
 		trap_pop
 	fi
-	trap_pop
-	trap_pop
-	trap_pop
-	trap_pop
 	trap_pop
 }
 
 function setupChroot()
 {
 	local rootfs
-	rootfs="${ROOTFS_REF[DIR]}"
+	rootfs="$1"
+	shift
 	
 	prepare_chroot ${rootfs}
 	# now we can actually chroot :D
+	build_info "executing scripts: $@"
 	for script in $@; do
 		execute sudo [ -r ${rootfs}/root/setup/${script} ] && {
 			# i had some problems to load $SRCDIR/setup/.bashrc.chroot in bashrc
@@ -116,13 +118,15 @@ function setup_rootfs()
 {
 	build_ok setting up rootfs $1
 	
-	local rootfs interactive
+	local rootfs scripts interactive
 	rootfs=$1
+	shift
+	scripts=$@
 	
 	# copy files to rootfs/setup folder
 	success sudo rm -rf ${rootfs}/root/setup
 	# prepare rootfs environment
-	source ${SRCDIR}/setup/setup.sh
+	source ${SRCDIR}/setup/setup.sh ${rootfs}
 	success sudo cp -a ${SRCDIR}/setup ${rootfs}/root
 	
 	interactive=""
@@ -131,22 +135,23 @@ function setup_rootfs()
 	fi
 
 	# execute the scripts
-	success setupChroot ${ROOTFS_SCRIPTS} ${interactive}
+	success setupChroot ${rootfs} ${scripts} ${interactive}
 	
-	build_ok setting up rootfs $1
+	build_ok setting up rootfs ${rootfs}
 }
-
-cd ${BUILDDIR}
-success build_rootfs "${ROOTFS_REF[DIR]}"
 
 if [ "${CONFIG_CREATE_ARM_BUILDCHROOT}" = "y" ]; then
 	build_ok "building arm chroot"
 	cd ${BUILDDIR}
 	success build_rootfs "${CONFIG_ARM_BUILD_CHROOT}"
+	success setup_rootfs "${CONFIG_ARM_BUILD_CHROOT}" "${BUILD_CHROOT_SCRIPTS}"
 fi
+
+cd ${BUILDDIR}
+success build_rootfs "${ROOTFS_REF[DIR]}"
 
 cd ${BUILDDIR}
 success copy_kernel_modules
 
 cd ${BUILDDIR}
-success setup_rootfs "${ROOTFS_REF[DIR]}"
+success setup_rootfs "${ROOTFS_REF[DIR]}" "${ROOTFS_SCRIPTS}"

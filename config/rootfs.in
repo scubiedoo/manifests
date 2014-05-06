@@ -12,14 +12,14 @@ menu "RootFS config"
 	comment "RootFS source"
 	config ROOTFS_SOURCE
 		string "url"
-		default "http://cdimage.ubuntu.com/ubuntu-core/releases/raring/release/ubuntu-core-13.04-core-armhf.tar.gz"
+		default "http://cdimage.ubuntu.com/ubuntu-core/releases/14.04/release/ubuntu-core-14.04-core-armhf.tar.gz"
 		help
 			The url is used to download the rootfs in case 
 			the file doesn't exist already
 	
 	config ROOTFS_FILE
 		string "file"
-		default "$SRCDIR/vm/ubuntu-core-13.04-core-armhf.tar.gz"
+		default "$SRCDIR/vm/ubuntu-core-14.04-core-armhf.tar.gz"
 		help
 			Location of the rootfs file.
 			Currently, tar.gz is expected.

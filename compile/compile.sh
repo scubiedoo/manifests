@@ -90,5 +90,5 @@ echo SCRIPTS $SCRIPTS
 for script in ${SCRIPTS}; do
 	success [ -r ${SRCDIR}/compile/${script}.sh ]
 	success cd $BUILDDIR
-	source ${SRCDIR}/compile/${script}.sh
+	success source ${SRCDIR}/compile/${script}.sh
 done

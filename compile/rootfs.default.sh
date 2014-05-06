@@ -7,3 +7,11 @@ build_set ROOTFS_SCRIPTS "\
 	apt-update.sh \
 	miniand_com.sh \
 	"
+
+build_export BUILD_CHROOT_SCRIPTS "\
+	adduser.sh \
+	setup-14.04.sh \
+	apt-update.sh \
+	xbmc-dependencies.sh \
+	buildroot/xbmc.sh \
+	"
